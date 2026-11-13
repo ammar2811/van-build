@@ -25,17 +25,22 @@ export interface DragState {
   followers: Record<string, Vec3>;
 }
 
+/** Which view of the design is showing. "split" is the plan and the 3D view side by side. */
+export type ViewMode = "plan" | "side" | "3d" | "split";
+
 interface UiState {
   selectedId: string | null;
   /** A display preference, not part of the design: the document is always millimetres. */
   units: UnitSystem;
   drag: DragState | null;
+  viewMode: ViewMode;
   saveStatus: SaveStatus;
   /** A message the user should see once, such as a saved design that could not be opened. */
   notice: string | null;
   select: (id: string | null) => void;
   setUnits: (units: UnitSystem) => void;
   setDrag: (drag: DragState | null) => void;
+  setViewMode: (viewMode: ViewMode) => void;
   setSaveStatus: (status: SaveStatus) => void;
   setNotice: (notice: string | null) => void;
 }
@@ -44,6 +49,7 @@ export const useUiStore = create<UiState>((set) => ({
   selectedId: null,
   units: loadUnits(),
   drag: null,
+  viewMode: "plan",
   saveStatus: "saved",
   notice: null,
   select: (selectedId) => set({ selectedId }),
@@ -56,6 +62,7 @@ export const useUiStore = create<UiState>((set) => ({
     set({ units });
   },
   setDrag: (drag) => set({ drag }),
+  setViewMode: (viewMode) => set({ viewMode }),
   setSaveStatus: (saveStatus) => set({ saveStatus }),
   setNotice: (notice) => set({ notice }),
 }));

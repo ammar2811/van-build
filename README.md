@@ -3,12 +3,15 @@
 An open-source camper van layout planner. Placement that snaps into place, exact dimensions,
 and numbers you can build from.
 
-Status: early. Milestones M0 to M2 are done: foundations, the 2D editor and the weight model. See [Roadmap](#roadmap).
+Status: early. Milestones M0 to M3 are done: foundations, the 2D editor, the weight model and
+the 3D view. See [Roadmap](#roadmap).
 
 ## What works today
 
 - 2D floor plans of six vans (Sprinter 144/170, Transit 148 medium/high roof, ProMaster
   136/159), built from published dimensions with every number sourced or marked as an estimate.
+- Three views of the same design: a top-down plan, a side elevation and a 3D view, with the
+  plan and 3D side by side on wide screens. Parts drag in 3D with the same snapping as the plan.
 - Live weight: front axle, rear axle and total against their ratings, payload left, and the
   centre of gravity on the plan, all updating while you drag.
 - People in the cab, tank fill levels, per-part weights, and your own door-sticker and
@@ -69,7 +72,8 @@ pnpm e2e
 packages/core      Pure TypeScript engine: units, schemas, shell geometry, snapping,
                    weight model, drawings. No DOM, no React.
 packages/catalog   Data only: van shells and part definitions, with sources.
-apps/web           The editor (React + Vite). Renders what the engine computes.
+apps/web           The editor (React + Vite, react-three-fiber for 3D). Renders what the
+                   engine computes. The 3D code is only downloaded when a 3D view is opened.
 docs               The maths and where the data comes from.
 ```
 
@@ -87,7 +91,7 @@ inches exist only at the edge of the UI.
 | M0 (done) | Engine, one sourced van, 2D drag and snap spike, PDF export   |
 | M1 (done) | Full 2D editor: more parts, locks, stacking, saved locally    |
 | M2 (done) | Live weight and axle-load panel, all six van shells           |
-| M3        | 3D view in sync with the plan, side elevation                 |
+| M3 (done) | 3D view in sync with the plan, side elevation                 |
 | M4        | Full part catalog, bill of materials, complete build pack PDF |
 | M5        | Accounts, cloud save, share links                             |
 | M6        | Launch hardening                                              |

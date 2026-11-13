@@ -1,16 +1,12 @@
 import { getPartDefinition } from "@vanbuild/catalog";
 import {
   clearances,
-  DEFAULT_SNAP_PX,
   type DesignDoc,
   formatLength,
   formatSize,
-  gridForScale,
   halfWidthAt,
   maxHalfWidth,
   minHalfWidth,
-  type Obstacle,
-  obstaclesFor,
   outlineAt,
   type PartInstance,
   parseLength,
@@ -18,17 +14,9 @@ import {
   partDimensions,
   partExtents,
   partName,
-  quantizeMm,
-  ridersOf,
   type SnapGuide,
-  type Sticky,
-  solveDrag,
-  solveStackedDrag,
-  supportSurfaces,
-  TOUCH_SNAP_PX,
   type UnitSystem,
   type VanShell,
-  type Vec3,
   type WallDistances,
 } from "@vanbuild/core";
 import {
@@ -39,11 +27,12 @@ import {
   useRef,
   useState,
 } from "react";
-import { isLocked, movePart, setGap } from "../../state/actions";
+import { isLocked, setGap } from "../../state/actions";
 import { useDocStore } from "../../state/docStore";
 import { useIssues, useShell, useWeight } from "../../state/selectors";
 import { useUiStore } from "../../state/uiStore";
 import { FitIcon, MinusIcon, PlusIcon } from "../../ui/icons";
+import { beginPartDrag, endPartDrag, movePartDrag, type PartDrag } from "../interaction/partDrag";
 import { type PlanTransform, screenRect, usePlanTransform } from "./usePlanTransform";
 
 /** Pointer travel, in pixels, before a press turns into a drag. */
@@ -54,21 +43,10 @@ type Side = keyof WallDistances;
 
 interface PartGesture {
   kind: "part";
-  id: string;
   pointerId: number;
   startX: number;
   startY: number;
-  /** Offset from the pointer to the part's centre, in mm. */
-  grab: { x: number; y: number };
-  size: Vec3;
-  z: number;
-  obstacles: Obstacle[];
-  /** Set for parts that drop onto whatever is under them. */
-  stacking: { supports: Obstacle[]; baseZ: number } | null;
-  /** Parts resting on this one, as offsets from its position. */
-  riders: { id: string; offset: Vec3 }[];
-  sticky: Sticky;
-  lastGood: { x: number; y: number };
+  drag: PartDrag;
   moved: boolean;
   /** Parts under the pointer when the press started, topmost first. */
   stack: string[];
@@ -266,41 +244,12 @@ export function PlanView() {
       gesture.current = pan(true);
       return;
     }
-    const def = getPartDefinition(part.defId);
-    const riderIds = ridersOf(doc, getPartDefinition, id);
-    const moving = [id, ...riderIds];
     gesture.current = {
       kind: "part",
-      id,
       pointerId: event.pointerId,
       startX: at.x,
       startY: at.y,
-      grab: { x: point.x - part.position.x, y: point.y - part.position.y },
-      size: partExtents(part),
-      z: part.position.z,
-      obstacles: obstaclesFor(doc, shell, getPartDefinition, part, riderIds),
-      stacking: def?.stacks
-        ? {
-            supports: supportSurfaces(doc, shell, getPartDefinition, moving),
-            baseZ: def.defaultElevation ?? 0,
-          }
-        : null,
-      riders: riderIds.flatMap((riderId) => {
-        const rider = doc.parts[riderId];
-        if (!rider) return [];
-        return [
-          {
-            id: riderId,
-            offset: {
-              x: rider.position.x - part.position.x,
-              y: rider.position.y - part.position.y,
-              z: rider.position.z - part.position.z,
-            },
-          },
-        ];
-      }),
-      sticky: {},
-      lastGood: { x: part.position.x, y: part.position.y },
+      drag: beginPartDrag(doc, shell, part, point),
       moved: false,
       stack,
       wasSelected,
@@ -340,45 +289,11 @@ export function PlanView() {
       return;
     }
 
-    const point = view.toModel(at.x, at.y);
-    const input = {
-      shell,
-      obstacles: active.obstacles,
-      size: active.size,
-      proposed: { x: point.x - active.grab.x, y: point.y - active.grab.y },
-      mmPerPx: 1 / view.scale,
-      snapPx: event.pointerType === "touch" ? TOUCH_SNAP_PX : DEFAULT_SNAP_PX,
-      gridMm: gridForScale(units, view.scale),
-      sticky: active.sticky,
-      fallback: active.lastGood,
+    movePartDrag(active.drag, shell, view.toModel(at.x, at.y), {
+      pxPerMm: view.scale,
+      touch: event.pointerType === "touch",
+      units,
       noSnap: event.altKey,
-    };
-    const result = active.stacking
-      ? solveStackedDrag({ ...input, ...active.stacking })
-      : solveDrag({ ...input, z: active.z });
-    active.sticky = result.sticky;
-    if (result.collisions.length === 0 && !result.outOfBounds) {
-      active.lastGood = { x: result.position.x, y: result.position.y };
-    }
-    const position = {
-      x: quantizeMm(result.position.x),
-      y: quantizeMm(result.position.y),
-      z: quantizeMm(result.position.z),
-    };
-    useUiStore.getState().setDrag({
-      id: active.id,
-      position,
-      guides: result.guides,
-      followers: Object.fromEntries(
-        active.riders.map((rider) => [
-          rider.id,
-          {
-            x: quantizeMm(position.x + rider.offset.x),
-            y: quantizeMm(position.y + rider.offset.y),
-            z: quantizeMm(position.z + rider.offset.z),
-          },
-        ]),
-      ),
     });
   };
 
@@ -399,17 +314,12 @@ export function PlanView() {
       if (!active.moved && !cancelled && !active.onPart) ui.select(null);
       return;
     }
-    const live = ui.drag;
-    ui.setDrag(null);
-    if (cancelled) return;
-    if (active.moved) {
-      if (live?.id === active.id) movePart(active.id, live.position);
-      return;
-    }
+    endPartDrag(active.drag, active.moved && !cancelled);
+    if (cancelled || active.moved) return;
     // A plain click on an already selected part picks the next part underneath it.
     if (active.wasSelected && active.stack.length > 1) {
-      const index = active.stack.indexOf(active.id);
-      ui.select(active.stack[(index + 1) % active.stack.length] ?? active.id);
+      const index = active.stack.indexOf(active.drag.id);
+      ui.select(active.stack[(index + 1) % active.stack.length] ?? active.drag.id);
     }
   };
 

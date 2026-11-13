@@ -12,6 +12,7 @@ export * from "./schema/geometry";
 export * from "./schema/part";
 export * from "./schema/shell";
 export * from "./shell/geometry";
+export * from "./shell/mesh";
 export * from "./snap/issues";
 export * from "./snap/solveDrag";
 export * from "./units/length";
