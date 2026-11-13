@@ -1,0 +1,15 @@
+{
+  "description": "1700 kg directly over the rear axle. All of it lands on the rear axle, which goes over its rating, and gross weight goes over GVWR.",
+  "wheelbaseMm": 3665,
+  "chassisKg": { "gvwr": 4105, "gawrFront": 2000, "gawrRear": 2430, "curbFront": 1400, "curbRear": 1100 },
+  "loads": [{ "id": "pallet", "massKg": 1700, "behindFrontAxleMm": 3665 }],
+  "expected": {
+    "frontKg": 1400.0,
+    "rearKg": 2800.0,
+    "grossKg": 4200.0,
+    "addedKg": 1700.0,
+    "payloadRemainingKg": -95.0,
+    "cgBehindFrontAxleMm": 2443.3,
+    "status": { "front": "ok", "rear": "over", "gross": "over" }
+  }
+}

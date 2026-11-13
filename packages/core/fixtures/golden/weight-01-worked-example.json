@@ -1,0 +1,22 @@
+{
+  "description": "The worked example from docs/physics.md. Expected values were calculated by hand, not copied from the code.",
+  "wheelbaseMm": 3665,
+  "chassisKg": { "gvwr": 4105, "gawrFront": 2000, "gawrRear": 2430, "curbFront": 1400, "curbRear": 1100 },
+  "loads": [
+    { "id": "driver-and-passenger", "massKg": 160, "behindFrontAxleMm": 1200 },
+    { "id": "galley-and-fridge", "massKg": 90, "behindFrontAxleMm": 2200 },
+    { "id": "fresh-water-and-tank", "massKg": 108, "behindFrontAxleMm": 3400 },
+    { "id": "battery-bank", "massKg": 40, "behindFrontAxleMm": 3700 },
+    { "id": "bed-platform-and-mattress", "massKg": 70, "behindFrontAxleMm": 3950 },
+    { "id": "garage-gear", "massKg": 120, "behindFrontAxleMm": 4200 }
+  ],
+  "expected": {
+    "frontKg": 1528.1,
+    "rearKg": 1559.9,
+    "grossKg": 3088.0,
+    "addedKg": 588.0,
+    "payloadRemainingKg": 1017.0,
+    "cgBehindFrontAxleMm": 1851.4,
+    "status": { "front": "ok", "rear": "ok", "gross": "ok" }
+  }
+}

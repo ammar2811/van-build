@@ -1,0 +1,15 @@
+{
+  "description": "One 200 kg load at 1.25 wheelbases behind the front axle. The rear axle carries 250 kg and the front axle is unloaded by 50 kg.",
+  "wheelbaseMm": 3665,
+  "chassisKg": { "gvwr": 4105, "gawrFront": 2000, "gawrRear": 2430, "curbFront": 1400, "curbRear": 1100 },
+  "loads": [{ "id": "bikes-on-rear-rack", "massKg": 200, "behindFrontAxleMm": 4581.25 }],
+  "expected": {
+    "frontKg": 1350.0,
+    "rearKg": 1350.0,
+    "grossKg": 2700.0,
+    "addedKg": 200.0,
+    "payloadRemainingKg": 1405.0,
+    "cgBehindFrontAxleMm": 1832.5,
+    "status": { "front": "ok", "rear": "ok", "gross": "ok" }
+  }
+}

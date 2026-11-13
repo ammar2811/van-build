@@ -1,0 +1,15 @@
+{
+  "description": "400 kg directly over the front axle. Only the front axle changes, and it lands exactly on the 90% warning threshold.",
+  "wheelbaseMm": 3665,
+  "chassisKg": { "gvwr": 4105, "gawrFront": 2000, "gawrRear": 2430, "curbFront": 1400, "curbRear": 1100 },
+  "loads": [{ "id": "winch-and-bumper", "massKg": 400, "behindFrontAxleMm": 0 }],
+  "expected": {
+    "frontKg": 1800.0,
+    "rearKg": 1100.0,
+    "grossKg": 2900.0,
+    "addedKg": 400.0,
+    "payloadRemainingKg": 1205.0,
+    "cgBehindFrontAxleMm": 1390.2,
+    "status": { "front": "warn", "rear": "ok", "gross": "ok" }
+  }
+}

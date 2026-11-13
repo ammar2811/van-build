@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="279.4mm" height="215.9mm" viewBox="0 0 279.4 215.9" font-family="Helvetica, Arial, sans-serif" stroke-linecap="round" stroke-linejoin="round">
+<title>Test layout - floor plan</title>
+<rect width="279.4" height="215.9" fill="rgb(255,255,255)"/>
+<rect x="10" y="10" width="259.4" height="195.9" fill="none" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="10" y1="191.9" x2="269.4" y2="191.9" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="14" y="197.9" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Test layout</text>
+<text x="14" y="202.9" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">Test Van - floor plan</text>
+<text x="139.7" y="200.4" font-size="2.4" text-anchor="middle" fill="rgb(89,89,89)">Planning estimate. Measure your own van before cutting.</text>
+<text x="265.4" y="197.9" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Scale 1:15</text>
+<text x="265.4" y="202.9" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">Dimensions in inches - 2026-11-12</text>
+<polygon points="26,19 226,19 226,139 26,139" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="0.6"/>
+<rect x="146" y="19" width="53.33" height="14.67" fill="rgb(204,204,204)" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="172.67" y="26.93" font-size="1.8" text-anchor="middle" fill="rgb(77,77,77)">wheel well</text>
+<rect x="146" y="124.33" width="53.33" height="14.67" fill="rgb(204,204,204)" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="172.67" y="132.27" font-size="1.8" text-anchor="middle" fill="rgb(77,77,77)">wheel well</text>
+<line x1="32.67" y1="19" x2="112.67" y2="19" stroke="rgb(140,140,140)" stroke-width="1.1"/>
+<text x="72.67" y="17" font-size="2.2" text-anchor="middle" fill="rgb(77,77,77)">Sliding door</text>
+<rect x="26" y="19" width="33.33" height="33.33" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="42.67" y="35.07" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">1</text>
+<text x="42.67" y="38.47" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Crate</text>
+<rect x="52.67" y="99" width="80" height="40" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="92.67" y="118.4" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">2</text>
+<text x="92.67" y="121.8" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Cabinet</text>
+<rect x="186" y="52.33" width="26.67" height="53.33" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="199.33" y="78.4" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">4</text>
+<text x="199.33" y="81.8" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Water tank</text>
+<rect x="59.33" y="107.89" width="66.67" height="20" fill="none" stroke="rgb(0,0,0)" stroke-width="0.3" stroke-dasharray="1.2 0.8"/>
+<text x="60.83" y="111.49" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">3  Overhead shelf</text>
+<line x1="26" y1="139" x2="26" y2="147.2" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="226" y1="139" x2="226" y2="147.2" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="26" y1="146" x2="226" y2="146" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="25.1" y1="146.9" x2="26.9" y2="145.1" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="225.1" y1="146.9" x2="226.9" y2="145.1" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="126" y="145" font-size="2.4" text-anchor="middle" fill="rgb(0,0,0)">118 1/8&quot;</text>
+<line x1="26" y1="19" x2="16.8" y2="19" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="26" y1="139" x2="16.8" y2="139" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="18" y1="19" x2="18" y2="139" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="17.1" y1="19.9" x2="18.9" y2="18.1" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="17.1" y1="139.9" x2="18.9" y2="138.1" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="17" y="79" font-size="2.4" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 17 79)">70 7/8&quot;</text>
+<text x="26" y="152" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">FRONT (cab)</text>
+<text x="226" y="152" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">REAR (doors)</text>
+<text x="15" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">#</text>
+<text x="23.52" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Part</text>
+<text x="60.03" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">W x D x H</text>
+<text x="100.19" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Front</text>
+<text x="113.58" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Driver</text>
+<text x="126.96" y="159.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Up</text>
+<line x1="14" y1="160.4" x2="135.7" y2="160.4" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="15" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">1</text>
+<text x="23.52" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Crate</text>
+<text x="60.03" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">19 11/16&quot; x 19 11/16&quot; x 19 11/16&quot;</text>
+<text x="100.19" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<text x="113.58" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">51 3/16&quot;</text>
+<text x="126.96" y="163.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<line x1="14" y1="164.8" x2="135.7" y2="164.8" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">2</text>
+<text x="23.52" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Cabinet</text>
+<text x="60.03" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">47 1/4&quot; x 23 5/8&quot; x 35 7/16&quot;</text>
+<text x="100.19" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">15 3/4&quot;</text>
+<text x="113.58" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<text x="126.96" y="167.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<line x1="14" y1="169.2" x2="135.7" y2="169.2" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">3</text>
+<text x="23.52" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Overhead shelf</text>
+<text x="60.03" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">39 3/8&quot; x 11 13/16&quot; x 13 3/4&quot;</text>
+<text x="100.19" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">19 11/16&quot;</text>
+<text x="113.58" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<text x="126.96" y="172.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">55 1/8&quot;</text>
+<line x1="14" y1="173.6" x2="135.7" y2="173.6" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">4</text>
+<text x="23.52" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Water tank</text>
+<text x="60.03" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">31 1/2&quot; x 15 3/4&quot; x 11 13/16&quot;</text>
+<text x="100.19" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">94 1/2&quot;</text>
+<text x="113.58" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">19 11/16&quot;</text>
+<text x="126.96" y="176.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">0&quot;</text>
+<line x1="14" y1="178" x2="135.7" y2="178" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="265.4" y="189.9" font-size="2" text-anchor="end" fill="rgb(89,89,89)">Front / Driver: clear distance from the front wall / driver-side wall. Up: height of the underside above the floor.</text>
+</svg>

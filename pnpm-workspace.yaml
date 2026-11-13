@@ -1,0 +1,7 @@
+packages:
+  - packages/*
+  - apps/*
+
+# core-js (pulled in by jspdf) only prints a funding banner in its install script.
+allowBuilds:
+  core-js: false
