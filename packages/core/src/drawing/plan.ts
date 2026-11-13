@@ -199,6 +199,8 @@ export function planDrawing(
   const floorFirst = [...numbered].sort(
     (a, b) => Number(a.part.position.z > 0) - Number(b.part.position.z > 0),
   );
+  // Corner labels already placed, so parts stacked on the same footprint do not overprint.
+  const cornerLabels: { x: number; y: number }[] = [];
   for (const { part, number } of floorFirst) {
     const def = requireDefinition(definitions, part.defId);
     const box = partBox(part);
@@ -216,10 +218,14 @@ export function planDrawing(
     if (raised) {
       // Raised parts are labelled in their corner so they do not sit on the label below them.
       const label = textWidth(name, 2.2) < w - 8 ? `${number}  ${name}` : String(number);
+      const sameCorner = cornerLabels.filter(
+        (corner) => Math.abs(corner.x - x) < 1 && Math.abs(corner.y - y) < 1,
+      ).length;
+      cornerLabels.push({ x, y });
       items.push({
         type: "text",
         x: x + 1.5,
-        y: y + 3.6,
+        y: y + 3.6 + sameCorner * 3.6,
         text: label,
         size: 2.6,
         anchor: "start",

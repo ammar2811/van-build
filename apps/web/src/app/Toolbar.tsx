@@ -1,6 +1,8 @@
 import type { UnitSystem } from "@vanbuild/core";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { exportPdf } from "../export/exportPdf";
+import type { SaveStatus } from "../persistence/autosave";
+import { renameDesign } from "../state/actions";
 import { useDocStore } from "../state/docStore";
 import { useShell } from "../state/selectors";
 import { useUiStore } from "../state/uiStore";
@@ -11,14 +13,69 @@ const UNIT_OPTIONS: { value: UnitSystem; label: string; name: string }[] = [
   { value: "imperial", label: "in", name: "Inches" },
 ];
 
-export function Toolbar() {
+const SAVE_LABEL: Record<SaveStatus, string> = {
+  saved: "Saved on this device",
+  pending: "Saving",
+  saving: "Saving",
+  failed: "Not saved",
+};
+
+/** The design's name. Click it to rename; Enter applies, Escape cancels. */
+function DesignName() {
   const name = useDocStore((state) => state.doc.name);
+  const [draft, setDraft] = useState<string | null>(null);
+  const cancelled = useRef(false);
+
+  if (draft === null) {
+    return (
+      <button
+        type="button"
+        className="toolbar-design"
+        data-testid="design-name"
+        title="Rename this design"
+        onClick={() => {
+          cancelled.current = false;
+          setDraft(name);
+        }}
+      >
+        {name}
+      </button>
+    );
+  }
+  return (
+    <input
+      className="toolbar-design-input"
+      data-testid="design-name-input"
+      aria-label="Design name"
+      value={draft}
+      maxLength={60}
+      // biome-ignore lint/a11y/noAutofocus: the field replaces the button that was just pressed
+      autoFocus
+      onFocus={(event) => event.currentTarget.select()}
+      onChange={(event) => setDraft(event.currentTarget.value)}
+      onBlur={() => {
+        if (!cancelled.current) renameDesign(draft);
+        setDraft(null);
+      }}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") event.currentTarget.blur();
+        if (event.key === "Escape") {
+          cancelled.current = true;
+          event.currentTarget.blur();
+        }
+      }}
+    />
+  );
+}
+
+export function Toolbar() {
   const canUndo = useDocStore((state) => state.past.length > 0);
   const canRedo = useDocStore((state) => state.future.length > 0);
   const undo = useDocStore((state) => state.undo);
   const redo = useDocStore((state) => state.redo);
   const units = useUiStore((state) => state.units);
   const setUnits = useUiStore((state) => state.setUnits);
+  const saveStatus = useUiStore((state) => state.saveStatus);
   const shell = useShell();
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
@@ -40,10 +97,22 @@ export function Toolbar() {
     <header className="toolbar">
       <div className="toolbar-title">
         <span className="wordmark">Van Build</span>
-        <span className="toolbar-design" data-testid="design-name">
-          {name}
-        </span>
+        <DesignName />
         <span className="toolbar-shell">{shell.name}</span>
+        <span
+          className="save-status"
+          data-status={saveStatus}
+          data-testid="save-status"
+          role="status"
+          title={
+            saveStatus === "failed"
+              ? "This browser is not letting the design be saved. Export a PDF to keep a copy."
+              : undefined
+          }
+        >
+          <span className="save-dot" aria-hidden="true" />
+          <span className="save-text">{SAVE_LABEL[saveStatus]}</span>
+        </span>
       </div>
 
       <div className="toolbar-actions">
@@ -97,6 +166,7 @@ export function Toolbar() {
           type="button"
           className="button button--primary"
           data-testid="export-pdf"
+          aria-label="Export PDF"
           disabled={exporting}
           onClick={onExport}
         >

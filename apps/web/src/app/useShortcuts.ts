@@ -1,6 +1,6 @@
 import { nudgeStepMm } from "@vanbuild/core";
 import { useEffect } from "react";
-import { deletePart, nudge, rotate } from "../state/actions";
+import { deletePart, duplicate, nudge, rotate, toggleLock } from "../state/actions";
 import { useDocStore } from "../state/docStore";
 import { useUiStore } from "../state/uiStore";
 
@@ -46,6 +46,14 @@ export function useShortcuts(): void {
         useDocStore.getState().redo();
         return;
       }
+      if (mod && key === "d") {
+        const selected = useUiStore.getState().selectedId;
+        if (!selected) return;
+        // Ctrl+D is "bookmark this page" in browsers; here it duplicates the selected part.
+        event.preventDefault();
+        duplicate(selected);
+        return;
+      }
       if (mod || event.altKey) return;
 
       const ui = useUiStore.getState();
@@ -59,6 +67,9 @@ export function useShortcuts(): void {
       if (key === "r") {
         event.preventDefault();
         rotate(id);
+      } else if (key === "l") {
+        event.preventDefault();
+        toggleLock(id);
       } else if (key === "Delete" || key === "Backspace") {
         event.preventDefault();
         deletePart(id);

@@ -9,6 +9,8 @@ interface LengthFieldProps {
   min?: number;
   max?: number;
   testId: string;
+  /** A locked part shows its values but does not take new ones. */
+  disabled?: boolean;
   onCommit: (mm: number) => void;
 }
 
@@ -16,7 +18,16 @@ interface LengthFieldProps {
  * A length you can type exactly: `600`, `23 5/8"`, `2' 3"`, `1200/2`, or `+50` to nudge.
  * Enter or leaving the field applies it, Escape puts the old value back.
  */
-export function LengthField({ label, value, units, min, max, testId, onCommit }: LengthFieldProps) {
+export function LengthField({
+  label,
+  value,
+  units,
+  min,
+  max,
+  testId,
+  disabled = false,
+  onCommit,
+}: LengthFieldProps) {
   const id = useId();
   const [draft, setDraftState] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -60,6 +71,7 @@ export function LengthField({ label, value, units, min, max, testId, onCommit }:
         autoComplete="off"
         autoCapitalize="off"
         spellCheck={false}
+        disabled={disabled}
         value={draft ?? formatLength(value, units)}
         aria-invalid={error !== null}
         aria-describedby={error ? `${id}-error` : undefined}

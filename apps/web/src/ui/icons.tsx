@@ -67,3 +67,36 @@ export const CheckIcon = () => (
     <path d="m4.5 10.5 3.5 3.5 7.5-8" />
   </Icon>
 );
+
+export const MinusIcon = () => (
+  <Icon>
+    <path d="M5 10h10" />
+  </Icon>
+);
+
+export const FitIcon = () => (
+  <Icon>
+    <path d="M4 7.5V4h3.5M16 7.5V4h-3.5M4 12.5V16h3.5M16 12.5V16h-3.5" />
+  </Icon>
+);
+
+export const LockIcon = () => (
+  <Icon>
+    <rect x="4.5" y="9" width="11" height="7.5" rx="1.5" />
+    <path d="M7 9V6.5a3 3 0 0 1 6 0V9" />
+  </Icon>
+);
+
+export const UnlockIcon = () => (
+  <Icon>
+    <rect x="4.5" y="9" width="11" height="7.5" rx="1.5" />
+    <path d="M7 9V6.5a3 3 0 0 1 5.8-1" />
+  </Icon>
+);
+
+export const CopyIcon = () => (
+  <Icon>
+    <rect x="7" y="7" width="9" height="9" rx="1.5" />
+    <path d="M13 7V5.5A1.5 1.5 0 0 0 11.5 4h-6A1.5 1.5 0 0 0 4 5.5v6A1.5 1.5 0 0 0 5.5 13H7" />
+  </Icon>
+);

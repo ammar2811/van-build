@@ -78,6 +78,10 @@ export const PartDefinitionSchema = z.object({
   mount: MountSchema,
   /** Height of the underside above the floor that a new instance starts at. Default 0. */
   defaultElevation: z.number().nonnegative().optional(),
+  /** Other parts can be put on top of this one (a cabinet, a bed platform). */
+  carries: z.boolean().optional(),
+  /** When dragged over something that carries, this part drops onto it (a mattress, a crate). */
+  stacks: z.boolean().optional(),
   params: z.array(ParamSchema),
   mass: z.object({
     /** Empty mass in grams. */

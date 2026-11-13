@@ -24,9 +24,10 @@ test.afterEach(() => {
 });
 
 test("opens with the starter layout and nothing flagged", async ({ page }) => {
-  await expect(page.locator("[data-part-name]")).toHaveCount(4);
+  await expect(page.locator("[data-part-name]")).toHaveCount(5);
   await expect(page.locator('[data-flagged="true"]')).toHaveCount(0);
   await expect(page.getByTestId("units-metric")).toBeChecked();
+  await expect(page.getByTestId("save-status")).toHaveAttribute("data-status", "saved");
 });
 
 test("shows layout totals on wide screens", async ({ page }, testInfo) => {
@@ -34,8 +35,8 @@ test("shows layout totals on wide screens", async ({ page }, testInfo) => {
     testInfo.project.name === "phone",
     "The summary is replaced by the parts tray on phones",
   );
-  await expect(page.getByTestId("total-parts")).toHaveText("4");
-  // 45 + 38 + 21 + (6 + 100 L of water) kg.
+  await expect(page.getByTestId("total-parts")).toHaveText("5");
+  // 30 + 15 + 38 + 21 + (6 + 100 L of water) kg.
   await expect(page.getByTestId("total-mass")).toHaveText("210.0 kg");
   await expect(page.getByTestId("total-price")).toHaveText("$2,030");
 });
@@ -132,17 +133,17 @@ test("keyboard: rotate, nudge, delete, undo and redo", async ({ page }) => {
   await expect(page.getByTestId("field-driver")).toHaveValue("0 mm");
 
   await page.keyboard.press("Delete");
-  await expect(page.locator("[data-part-name]")).toHaveCount(3);
-  await page.keyboard.press("Control+z");
   await expect(page.locator("[data-part-name]")).toHaveCount(4);
+  await page.keyboard.press("Control+z");
+  await expect(page.locator("[data-part-name]")).toHaveCount(5);
   await page.keyboard.press("Control+Shift+z");
-  await expect(page.locator("[data-part-name]")).toHaveCount(3);
+  await expect(page.locator("[data-part-name]")).toHaveCount(4);
 });
 
 test("adding parts drops them in a free spot", async ({ page }) => {
   await page.getByTestId("add-bench-seat").click();
   await expect(page.getByTestId("inspector-name")).toHaveText("Bench seat");
-  await expect(page.locator("[data-part-name]")).toHaveCount(5);
+  await expect(page.locator("[data-part-name]")).toHaveCount(6);
   await expect(page.locator('[data-flagged="true"]')).toHaveCount(0);
 });
 
@@ -170,8 +171,10 @@ test("an overhead cabinet stops at the leaning wall, not the floor outline", asy
 });
 
 test("clicking a selected part again selects what is underneath it", async ({ page }) => {
-  // The water tank sits under the raised bed platform.
+  // The water tank sits under the bed platform, which has the mattress on it.
   const point = centre(await partRect(page, "water"));
+  await page.mouse.click(point.x, point.y);
+  await expect(page.getByTestId("inspector-name")).toHaveText("Mattress");
   await page.mouse.click(point.x, point.y);
   await expect(page.getByTestId("inspector-name")).toHaveText("Bed platform");
   await page.mouse.click(point.x, point.y);

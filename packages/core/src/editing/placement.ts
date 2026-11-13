@@ -73,6 +73,22 @@ export function clearances(
   return result;
 }
 
+/** Move a part so the gap on one side (to its nearest neighbour or wall) is exactly `distance`. */
+export function setClearance(
+  doc: DesignDoc,
+  shell: VanShell,
+  part: PartInstance,
+  side: keyof WallDistances,
+  distance: number,
+): PartInstance {
+  const delta = distance - clearances(doc, shell, part)[side].distance;
+  const { x, y } = part.position;
+  if (side === "front") return withPosition(part, x + delta, y);
+  if (side === "rear") return withPosition(part, x - delta, y);
+  if (side === "driver") return withPosition(part, x, y + delta);
+  return withPosition(part, x, y - delta);
+}
+
 function withPosition(part: PartInstance, x: number, y: number, z = part.position.z) {
   return { ...part, position: { x: quantizeMm(x), y: quantizeMm(y), z: quantizeMm(z) } };
 }

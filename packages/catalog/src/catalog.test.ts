@@ -6,6 +6,7 @@ import {
   interiorHeightAt,
   PartDefinitionSchema,
   requiredProvenanceKeys,
+  ridersOf,
   VanShellSchema,
   wallDistances,
 } from "@vanbuild/core";
@@ -111,6 +112,12 @@ describe("part definitions", () => {
   }
 });
 
+describe("catalog size", () => {
+  it("offers at least ten parts", () => {
+    expect(partDefinitions.length).toBeGreaterThanOrEqual(10);
+  });
+});
+
 describe("starter design", () => {
   const doc = starterDesign();
   const shell = getShell(doc.shellId);
@@ -133,13 +140,14 @@ describe("starter design", () => {
       return found;
     };
     expect(wallDistances(shell, part("bed")).rear).toBe(0);
+    expect(ridersOf(doc, getPartDefinition, "bed")).toEqual(["mattress"]);
     expect(wallDistances(shell, part("galley")).driver).toBe(0);
     expect(wallDistances(shell, part("fridge")).driver).toBe(0);
   });
 
   it("stays within the axle and gross ratings", () => {
     const report = designWeight(doc, shell, getPartDefinition);
-    expect(report.added).toBe(45_000 + 38_000 + 21_000 + 106_000);
+    expect(report.added).toBe(30_000 + 15_000 + 38_000 + 21_000 + 106_000);
     expect(report.front.status).toBe("ok");
     expect(report.rear.status).toBe("ok");
     expect(report.gross.status).toBe("ok");

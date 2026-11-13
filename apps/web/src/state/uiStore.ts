@@ -1,5 +1,6 @@
 import type { SnapGuide, UnitSystem, Vec3 } from "@vanbuild/core";
 import { create } from "zustand";
+import type { SaveStatus } from "../persistence/autosave";
 
 const UNITS_KEY = "vanbuild.units";
 
@@ -20,6 +21,8 @@ export interface DragState {
   id: string;
   position: Vec3;
   guides: SnapGuide[];
+  /** Live positions of the parts riding on the dragged part. */
+  followers: Record<string, Vec3>;
 }
 
 interface UiState {
@@ -27,15 +30,22 @@ interface UiState {
   /** A display preference, not part of the design: the document is always millimetres. */
   units: UnitSystem;
   drag: DragState | null;
+  saveStatus: SaveStatus;
+  /** A message the user should see once, such as a saved design that could not be opened. */
+  notice: string | null;
   select: (id: string | null) => void;
   setUnits: (units: UnitSystem) => void;
   setDrag: (drag: DragState | null) => void;
+  setSaveStatus: (status: SaveStatus) => void;
+  setNotice: (notice: string | null) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
   selectedId: null,
   units: loadUnits(),
   drag: null,
+  saveStatus: "saved",
+  notice: null,
   select: (selectedId) => set({ selectedId }),
   setUnits: (units) => {
     try {
@@ -46,4 +56,6 @@ export const useUiStore = create<UiState>((set) => ({
     set({ units });
   },
   setDrag: (drag) => set({ drag }),
+  setSaveStatus: (saveStatus) => set({ saveStatus }),
+  setNotice: (notice) => set({ notice }),
 }));

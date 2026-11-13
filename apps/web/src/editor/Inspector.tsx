@@ -10,12 +10,33 @@ import {
   WHEEL_WELL_PREFIX,
   wallDistances,
 } from "@vanbuild/core";
-import { deletePart, resize, rotate, setDistance, setElevation } from "../state/actions";
+import {
+  clearAll,
+  deletePart,
+  duplicate,
+  isLocked,
+  resize,
+  rotate,
+  setDistance,
+  setElevation,
+  toggleLock,
+} from "../state/actions";
 import { useDocStore } from "../state/docStore";
 import { useIssues, useSelectedPart, useShell, useTotals } from "../state/selectors";
 import { useUiStore } from "../state/uiStore";
-import { CheckIcon, RotateIcon, TrashIcon } from "../ui/icons";
+import { CheckIcon, CopyIcon, LockIcon, RotateIcon, TrashIcon, UnlockIcon } from "../ui/icons";
 import { LengthField } from "./LengthField";
+
+/** Look up display names for the things an issue refers to. */
+function useNameOf(): (id: string) => string {
+  const parts = useDocStore((state) => state.doc.parts);
+  return (id) => {
+    if (id.startsWith(WHEEL_WELL_PREFIX)) return "a wheel well";
+    const part = parts[id];
+    const def = part && getPartDefinition(part.defId);
+    return part && def ? partName(def, part) : "another part";
+  };
+}
 
 function describeIssue(issue: PartIssue, nameOf: (id: string) => string): string {
   if (issue.kind === "outOfBounds") return "Sticks out through a wall.";
@@ -27,8 +48,8 @@ export function Inspector() {
   const part = useSelectedPart();
   const shell = useShell();
   const units = useUiStore((state) => state.units);
-  const parts = useDocStore((state) => state.doc.parts);
   const issues = useIssues();
+  const nameOf = useNameOf();
 
   if (!part) return <LayoutSummary />;
   const def = getPartDefinition(part.defId);
@@ -36,15 +57,10 @@ export function Inspector() {
 
   const { width, depth, height } = partDimensions(part);
   const distances = wallDistances(shell, part);
+  const locked = isLocked(part);
   const limits = (key: string) => {
     const param = def.params.find((p) => p.key === key);
     return param?.kind === "length" ? { min: param.min, max: param.max } : {};
-  };
-  const nameOf = (id: string) => {
-    if (id.startsWith(WHEEL_WELL_PREFIX)) return "a wheel well";
-    const other = parts[id];
-    const otherDef = other && getPartDefinition(other.defId);
-    return other && otherDef ? partName(otherDef, other) : "another part";
   };
   const partIssues = issues.get(part.id) ?? [];
 
@@ -58,6 +74,7 @@ export function Inspector() {
           <p className="muted">
             {formatMass(partMass(def, part), units)} ·{" "}
             {formatMoney(partPrice(def, part), def.price.currency)}
+            {locked && " · Locked"}
           </p>
         </div>
       </header>
@@ -77,6 +94,7 @@ export function Inspector() {
           testId="field-width"
           value={width}
           units={units}
+          disabled={locked}
           {...limits("width")}
           onCommit={(mm) => resize(part.id, "width", mm)}
         />
@@ -85,6 +103,7 @@ export function Inspector() {
           testId="field-depth"
           value={depth}
           units={units}
+          disabled={locked}
           {...limits("depth")}
           onCommit={(mm) => resize(part.id, "depth", mm)}
         />
@@ -93,6 +112,7 @@ export function Inspector() {
           testId="field-height"
           value={height}
           units={units}
+          disabled={locked}
           {...limits("height")}
           onCommit={(mm) => resize(part.id, "height", mm)}
         />
@@ -105,6 +125,7 @@ export function Inspector() {
           testId="field-front"
           value={distances.front}
           units={units}
+          disabled={locked}
           onCommit={(mm) => setDistance(part.id, "front", mm)}
         />
         <LengthField
@@ -112,6 +133,7 @@ export function Inspector() {
           testId="field-driver"
           value={distances.driver}
           units={units}
+          disabled={locked}
           onCommit={(mm) => setDistance(part.id, "driver", mm)}
         />
         <LengthField
@@ -120,6 +142,7 @@ export function Inspector() {
           value={part.position.z}
           units={units}
           min={0}
+          disabled={locked}
           onCommit={(mm) => setElevation(part.id, mm)}
         />
       </div>
@@ -131,6 +154,7 @@ export function Inspector() {
           data-testid="rotate"
           aria-label="Rotate 90 degrees"
           title="Rotate 90 degrees (R)"
+          disabled={locked}
           onClick={() => rotate(part.id)}
         >
           <RotateIcon />
@@ -138,10 +162,34 @@ export function Inspector() {
         </button>
         <button
           type="button"
+          className="button"
+          data-testid="duplicate"
+          aria-label="Duplicate part"
+          title="Duplicate (Ctrl+D)"
+          onClick={() => duplicate(part.id)}
+        >
+          <CopyIcon />
+          <span className="button-label">Duplicate</span>
+        </button>
+        <button
+          type="button"
+          className="button"
+          data-testid="lock"
+          aria-pressed={locked}
+          aria-label={locked ? "Unlock part" : "Lock part"}
+          title={locked ? "Unlock (L)" : "Lock so it cannot be moved or changed (L)"}
+          onClick={() => toggleLock(part.id)}
+        >
+          {locked ? <LockIcon /> : <UnlockIcon />}
+          <span className="button-label">{locked ? "Unlock" : "Lock"}</span>
+        </button>
+        <button
+          type="button"
           className="button button--danger"
           data-testid="delete"
           aria-label="Delete part"
           title="Delete (Del)"
+          disabled={locked}
           onClick={() => deletePart(part.id)}
         >
           <TrashIcon />
@@ -164,6 +212,10 @@ export function Inspector() {
 function LayoutSummary() {
   const totals = useTotals();
   const units = useUiStore((state) => state.units);
+  const issues = useIssues();
+  const nameOf = useNameOf();
+  const flagged = [...issues.entries()];
+
   return (
     <section className="inspector" aria-label="Layout summary" data-testid="summary">
       <header className="inspector-head">
@@ -186,10 +238,40 @@ function LayoutSummary() {
           <dd data-testid="total-price">{formatMoney(totals.price, totals.currency)}</dd>
         </div>
       </dl>
+
+      {flagged.length > 0 && (
+        <>
+          <h3>Needs attention</h3>
+          <ul className="issue-list" data-testid="issue-list">
+            {flagged.map(([partId, partIssues]) => (
+              <li key={partId}>
+                <button type="button" onClick={() => useUiStore.getState().select(partId)}>
+                  <strong>{nameOf(partId)}</strong>
+                  <span className="issue-text">
+                    {partIssues.map((issue) => describeIssue(issue, nameOf)).join(" ")}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
       <p className="hint">
         Drag parts to move them. They snap to walls and to each other. Hold Alt to place freely,
-        press R to rotate, and use the arrow keys to nudge.
+        press R to rotate, and use the arrow keys to nudge. Scroll or pinch to zoom.
       </p>
+
+      {totals.count > 0 && (
+        <button
+          type="button"
+          className="button button--quiet"
+          data-testid="clear-all"
+          onClick={clearAll}
+        >
+          Remove all parts
+        </button>
+      )}
     </section>
   );
 }

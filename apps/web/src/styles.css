@@ -150,9 +150,62 @@ input {
 }
 
 .toolbar-design {
+  min-width: 0;
+  margin: 0 -6px;
+  padding: 3px 6px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
   font-weight: 500;
   overflow: hidden;
   text-overflow: ellipsis;
+  cursor: text;
+}
+
+.toolbar-design:hover {
+  background: var(--bg);
+}
+
+.toolbar-design-input {
+  width: 220px;
+  min-width: 0;
+  height: 28px;
+  margin: 0 -6px;
+  padding: 0 6px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  background: var(--panel);
+  font-weight: 500;
+  align-self: center;
+}
+
+.save-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  align-self: center;
+}
+
+.save-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.save-status[data-status="pending"] .save-dot,
+.save-status[data-status="saving"] .save-dot {
+  background: var(--line-strong);
+}
+
+.save-status[data-status="failed"] {
+  color: var(--danger);
+}
+
+.save-status[data-status="failed"] .save-dot {
+  background: var(--danger);
 }
 
 .toolbar-shell {
@@ -161,10 +214,15 @@ input {
   text-overflow: ellipsis;
 }
 
-.toolbar-design::before,
 .toolbar-shell::before {
   content: "/";
   margin-right: 12px;
+  color: var(--line-strong);
+}
+
+.wordmark::after {
+  content: "/";
+  margin-left: 12px;
   color: var(--line-strong);
   font-weight: 400;
 }
@@ -258,6 +316,17 @@ input {
 
 .button--danger {
   color: var(--danger);
+}
+
+.button--quiet {
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--ink);
 }
 
 .button--danger:hover:not(:disabled) {
@@ -605,6 +674,53 @@ input {
   font-size: 13px;
 }
 
+.issue-list {
+  display: grid;
+  gap: 6px;
+}
+
+.issue-list button {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: var(--danger-soft);
+  color: var(--danger);
+  text-align: left;
+  cursor: pointer;
+}
+
+.issue-list button:hover {
+  border-color: var(--danger);
+}
+
+.issue-text {
+  font-size: 13px;
+}
+
+.app-notice {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(560px, calc(100% - 24px));
+  padding: 10px 10px 10px 14px;
+  transform: translateX(-50%);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.app-notice p {
+  flex: 1;
+}
+
 /* ---------- Plan view ---------- */
 
 .plan {
@@ -633,6 +749,69 @@ input {
 .plan-grid line {
   stroke: var(--grid);
   stroke-width: 1;
+}
+
+.plan-grid line.is-minor {
+  opacity: 0.55;
+}
+
+.plan-zoom {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.plan-zoom .icon-button {
+  border-radius: 0;
+  margin-left: -1px;
+}
+
+.plan-zoom .icon-button:first-child {
+  margin-left: 0;
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.plan-zoom .icon-button:last-child {
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.plan-zoom .icon-button:disabled {
+  opacity: 1;
+  color: var(--line-strong);
+}
+
+.plan-zoom .icon-button:hover:not(:disabled),
+.plan-zoom .icon-button:focus-visible {
+  position: relative;
+  z-index: 1;
+}
+
+.plan-gap-input {
+  position: absolute;
+  z-index: 1;
+  width: 92px;
+  height: 28px;
+  padding: 0 8px;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--accent);
+  border-radius: 14px;
+  background: var(--panel);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.plan-gap-input:focus {
+  outline: none;
+}
+
+.plan-gap-input[aria-invalid="true"] {
+  border-color: var(--danger);
 }
 
 .plan-walls {
@@ -719,6 +898,18 @@ input {
   stroke-width: 3;
 }
 
+.part.is-locked {
+  cursor: default;
+}
+
+.part-lock {
+  fill: none;
+  stroke: var(--part-stroke);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
 .part-name,
 .part-size {
   text-anchor: middle;
@@ -750,6 +941,11 @@ input {
   pointer-events: none;
 }
 
+.plan-gap.is-editable {
+  pointer-events: auto;
+  cursor: text;
+}
+
 .plan-distances line {
   stroke: var(--accent);
   stroke-width: 1;
@@ -758,6 +954,10 @@ input {
 
 .plan-distances rect {
   fill: var(--accent);
+}
+
+.plan-gap.is-editable:hover rect {
+  fill: color-mix(in srgb, var(--accent) 82%, black);
 }
 
 .plan-distances text {
@@ -804,8 +1004,26 @@ input {
   }
 
   .toolbar-shell,
-  .toolbar-design {
+  .wordmark,
+  .save-text {
     display: none;
+  }
+
+  .toolbar-title {
+    gap: 8px;
+  }
+
+  .toolbar-design {
+    margin: 0;
+    padding: 3px 0;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .toolbar-design-input {
+    width: 100%;
+    margin: 0;
+    font-size: 16px;
   }
 
   .button,

@@ -8,6 +8,8 @@ import { useShortcuts } from "./useShortcuts";
 export function App() {
   useShortcuts();
   const hasSelection = useUiStore((state) => state.selectedId !== null);
+  const notice = useUiStore((state) => state.notice);
+  const setNotice = useUiStore((state) => state.setNotice);
   return (
     <div className="app" data-has-selection={hasSelection}>
       <Toolbar />
@@ -16,6 +18,14 @@ export function App() {
       </aside>
       <main className="canvas">
         <PlanView />
+        {notice && (
+          <div className="app-notice" role="alert" data-testid="notice">
+            <p>{notice}</p>
+            <button type="button" className="button" onClick={() => setNotice(null)}>
+              Dismiss
+            </button>
+          </div>
+        )}
       </main>
       <aside className="sidebar sidebar--inspector">
         <Inspector />

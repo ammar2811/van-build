@@ -94,8 +94,10 @@ function definition(
 }
 
 export const testDefinitions: PartDefinition[] = [
-  definition("cabinet", "Cabinet", 1200, 600, 900, 40),
+  definition("cabinet", "Cabinet", 1200, 600, 900, 40, { carries: true }),
   definition("crate", "Crate", 500, 500, 500, 10),
+  definition("box", "Stacking box", 400, 300, 200, 5, { carries: true, stacks: true }),
+  definition("deck", "Deck", 1200, 1600, 50, 25, { carries: true, defaultElevation: 600 }),
   definition("shelf", "Overhead shelf", 1000, 300, 350, 8, { defaultElevation: 1400 }),
   definition("tank", "Water tank", 800, 400, 300, 6, {
     mass: { fixed: kgToGrams(6), contents: { capacityLitres: 90, gramsPerLitre: 1000 } },

@@ -9,10 +9,20 @@ interface Rect {
   height: number;
 }
 
+/**
+ * Where an SVG shape is on the page, from its geometry. Unlike `boundingBox()` this ignores
+ * the stroke, so a thick selection outline does not shift the numbers.
+ */
 async function rectOf(page: Page, selector: string): Promise<Rect> {
-  const box = await page.locator(selector).first().boundingBox();
-  if (!box) throw new Error(`Nothing on screen for ${selector}`);
-  return box;
+  const target = page.locator(selector).first();
+  await expect(target).toBeAttached();
+  return target.evaluate((element) => {
+    const shape = element as SVGGraphicsElement;
+    const svg = shape.ownerSVGElement?.getBoundingClientRect();
+    if (!svg) throw new Error("Shape is not inside an SVG");
+    const box = shape.getBBox();
+    return { x: svg.left + box.x, y: svg.top + box.y, width: box.width, height: box.height };
+  });
 }
 
 export function partRect(page: Page, id: string): Promise<Rect> {
@@ -93,4 +103,25 @@ export function watchForErrors(page: Page): string[] {
     if (message.type() === "error") errors.push(message.text());
   });
   return errors;
+}
+
+/** Wait until the latest change has reached storage. */
+export async function waitForSave(page: Page): Promise<void> {
+  await expect(page.getByTestId("save-status")).toHaveAttribute("data-status", "saved");
+}
+
+export function selectedRect(page: Page): Promise<Rect> {
+  return rectOf(page, ".part.is-selected .part-body");
+}
+
+/** Drag whatever is at `from` to `to` with the mouse. */
+export async function dragBetween(
+  page: Page,
+  from: { x: number; y: number },
+  to: { x: number; y: number },
+): Promise<void> {
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  await page.mouse.move(to.x, to.y, { steps: 12 });
+  await page.mouse.up();
 }

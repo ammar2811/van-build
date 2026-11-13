@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import type { Obstacle } from "../parts/parts";
 import { boxesOverlap } from "../schema/geometry";
 import { emptyShell, testShell } from "../testing/fixtures";
-import { type DragInput, solveDrag } from "./solveDrag";
+import { type DragInput, gridForScale, solveDrag } from "./solveDrag";
 
 function obstacle(
   id: string,
@@ -106,6 +106,18 @@ describe("snapping", () => {
   it("can be switched off", () => {
     const result = solveDrag(drag({ proposed: { x: 1503.7, y: -690 }, noSnap: true }));
     expect(result.position).toEqual({ x: 1503.7, y: -690, z: 0 });
+  });
+});
+
+describe("gridForScale", () => {
+  it("gets finer as you zoom in", () => {
+    expect(gridForScale("metric", 0.25)).toBe(10);
+    expect(gridForScale("metric", 0.4)).toBe(10);
+    expect(gridForScale("metric", 1)).toBe(5);
+    expect(gridForScale("metric", 4)).toBe(1);
+    expect(gridForScale("imperial", 0.25)).toBe(6.35);
+    expect(gridForScale("imperial", 1.5)).toBe(3.175);
+    expect(gridForScale("imperial", 3)).toBe(1.5875);
   });
 });
 

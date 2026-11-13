@@ -16,8 +16,8 @@ function definition(id: string) {
 }
 
 /**
- * A small layout to start from: bed across the rear with the water tank under it, galley and
- * fridge along the driver side. Positions are derived from the shell, so they stay flush if
+ * A small layout to start from: bed and mattress across the rear with the water tank under
+ * them, galley and fridge along the driver side. Positions are derived from the shell, so they stay flush if
  * the shell data is refined.
  */
 export function starterDesign(): DesignDoc {
@@ -30,6 +30,10 @@ export function starterDesign(): DesignDoc {
   };
 
   const bed = at("bed", "bed-platform", (part) => setWallDistance(shell, part, "rear", 0));
+  const mattress = at("mattress", "mattress", (part) => ({
+    ...setWallDistance(shell, part, "rear", 0),
+    position: { ...bed.position, z: bed.position.z + partExtents(bed).z },
+  }));
   const galley = at("galley", "galley-cabinet", (part) => {
     const flushToWell = wellFront - partExtents(part).x;
     return setWallDistance(shell, setWallDistance(shell, part, "front", flushToWell), "driver", 0);
@@ -52,6 +56,6 @@ export function starterDesign(): DesignDoc {
     name: "My Sprinter 144",
     shellId: shell.id,
     chassisId: "worker-rwd-diesel",
-    parts: { bed, galley, fridge, water },
+    parts: { bed, mattress, galley, fridge, water },
   };
 }

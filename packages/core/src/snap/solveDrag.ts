@@ -18,6 +18,16 @@ export function defaultGridMm(system: UnitSystem): number {
   return system === "metric" ? 10 : MM_PER_INCH / 4;
 }
 
+/**
+ * Grid step for the current zoom: the finest step that is still a few pixels wide, so
+ * zooming in gives finer placement (10 mm, 5 mm, 1 mm or 1/4, 1/8, 1/16 in).
+ */
+export function gridForScale(system: UnitSystem, pxPerMm: number): number {
+  const steps =
+    system === "metric" ? [1, 5, 10] : [MM_PER_INCH / 16, MM_PER_INCH / 8, MM_PER_INCH / 4];
+  return steps.find((step) => step * pxPerMm >= 4) ?? defaultGridMm(system);
+}
+
 export type Axis = "x" | "y";
 
 /** wall: a van wall or end. face: flush against a part. edge: lined up with a part's edge. */

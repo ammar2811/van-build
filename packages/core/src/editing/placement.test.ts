@@ -13,6 +13,7 @@ import {
   placeNewPart,
   resizePart,
   rotatePart,
+  setClearance,
   setFloorHeight,
   setWallDistance,
   touchesWall,
@@ -74,6 +75,20 @@ describe("clearances", () => {
     const offToTheSide = testPart("side", "crate", 600, 650);
     const result = clearances(testDesign([part, overhead, offToTheSide]), testShell, part);
     expect(result.front).toEqual({ distance: 1250, toId: null });
+  });
+});
+
+describe("setClearance", () => {
+  it("sets the gap to a neighbour on each side", () => {
+    const part = testPart("c", "crate", 1500, 0);
+    const ahead = testPart("ahead", "crate", 600, 100);
+    const beside = testPart("beside", "cabinet", 1500, -600);
+    const doc = testDesign([part, ahead, beside]);
+    for (const side of ["front", "rear", "driver", "passenger"] as const) {
+      const moved = setClearance(doc, testShell, part, side, 120);
+      const after = { ...doc, parts: { ...doc.parts, c: moved } };
+      expect(clearances(after, testShell, moved)[side].distance, side).toBe(120);
+    }
   });
 });
 

@@ -103,13 +103,18 @@ export interface Obstacle {
 export const WHEEL_WELL_PREFIX = "wheelwell:";
 
 /** Everything a moving part can bump into: the other parts and the wheel wells. */
-export function sceneObstacles(doc: DesignDoc, shell: VanShell, excludeId?: string): Obstacle[] {
+export function sceneObstacles(
+  doc: DesignDoc,
+  shell: VanShell,
+  exclude: string | readonly string[] = [],
+): Obstacle[] {
+  const skip = new Set(typeof exclude === "string" ? [exclude] : exclude);
   const obstacles: Obstacle[] = shell.wheelWells.map((box, i) => ({
     id: `${WHEEL_WELL_PREFIX}${i}`,
     box,
   }));
   for (const part of Object.values(doc.parts)) {
-    if (part.id !== excludeId) obstacles.push({ id: part.id, box: partBox(part) });
+    if (!skip.has(part.id)) obstacles.push({ id: part.id, box: partBox(part) });
   }
   return obstacles;
 }
