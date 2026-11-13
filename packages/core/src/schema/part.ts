@@ -82,6 +82,10 @@ export const PartDefinitionSchema = z.object({
   carries: z.boolean().optional(),
   /** When dragged over something that carries, this part drops onto it (a mattress, a crate). */
   stacks: z.boolean().optional(),
+  /** Furniture with usable space inside (a cabinet, a bench). */
+  hollow: z.boolean().optional(),
+  /** A component that may sit inside hollow furniture (a tank, a battery). */
+  fitsInside: z.boolean().optional(),
   params: z.array(ParamSchema),
   mass: z.object({
     /** Empty mass in grams. */

@@ -19,6 +19,7 @@ import {
   rotate,
   setDistance,
   setElevation,
+  setPartMass,
   toggleLock,
 } from "../state/actions";
 import { useDocStore } from "../state/docStore";
@@ -26,6 +27,7 @@ import { useIssues, useSelectedPart, useShell, useTotals } from "../state/select
 import { useUiStore } from "../state/uiStore";
 import { CheckIcon, CopyIcon, LockIcon, RotateIcon, TrashIcon, UnlockIcon } from "../ui/icons";
 import { LengthField } from "./LengthField";
+import { MassField } from "./MassField";
 
 /** Look up display names for the things an issue refers to. */
 function useNameOf(): (id: string) => string {
@@ -50,6 +52,7 @@ export function Inspector() {
   const units = useUiStore((state) => state.units);
   const issues = useIssues();
   const nameOf = useNameOf();
+  const fillLevels = useDocStore((state) => state.doc.loadCase.fillLevels);
 
   if (!part) return <LayoutSummary />;
   const def = getPartDefinition(part.defId);
@@ -63,6 +66,7 @@ export function Inspector() {
     return param?.kind === "length" ? { min: param.min, max: param.max } : {};
   };
   const partIssues = issues.get(part.id) ?? [];
+  const fill = fillLevels[part.id] ?? 1;
 
   return (
     // Keyed by part so a half-typed value never carries over to another part.
@@ -72,7 +76,7 @@ export function Inspector() {
         <div>
           <h2 data-testid="inspector-name">{partName(def, part)}</h2>
           <p className="muted">
-            {formatMass(partMass(def, part), units)} ·{" "}
+            {formatMass(partMass(def, part, fill), units)} ·{" "}
             {formatMoney(partPrice(def, part), def.price.currency)}
             {locked && " · Locked"}
           </p>
@@ -144,6 +148,19 @@ export function Inspector() {
           min={0}
           disabled={locked}
           onCommit={(mm) => setElevation(part.id, mm)}
+        />
+      </div>
+
+      <h3>Weight</h3>
+      <div className="field-grid field-grid--weight">
+        <MassField
+          label={def.mass.contents ? "Empty weight" : "Weight"}
+          testId="field-mass"
+          value={part.overrides.mass ?? def.mass.fixed}
+          units={units}
+          disabled={locked}
+          onReset={part.overrides.mass === undefined ? undefined : () => setPartMass(part.id, null)}
+          onCommit={(grams) => setPartMass(part.id, grams === def.mass.fixed ? null : grams)}
         />
       </div>
 

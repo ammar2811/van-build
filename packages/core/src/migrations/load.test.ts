@@ -10,6 +10,27 @@ describe("loadDesign", () => {
     expect(result).toEqual({ ok: true, doc, migratedFrom: null });
   });
 
+  it("brings a version 1 design up to date", () => {
+    const { vehicle: _vehicle, loadCase: _loadCase, ...rest } = sampleDesign();
+    const result = loadDesign(JSON.parse(JSON.stringify({ ...rest, schemaVersion: 1 })));
+    expect(result.ok).toBe(true);
+    if (!result.ok) return;
+    expect(result.migratedFrom).toBe(1);
+    expect(result.doc.schemaVersion).toBe(DESIGN_SCHEMA_VERSION);
+    expect(result.doc.vehicle).toEqual({});
+    expect(result.doc.loadCase).toEqual({ occupants: 2, occupantMass: 80_000, fillLevels: {} });
+    expect(result.doc.parts).toEqual(sampleDesign().parts);
+  });
+
+  it("rejects a fill level outside 0 to 1 and a negative vehicle weight", () => {
+    const overfull = JSON.parse(JSON.stringify(sampleDesign()));
+    overfull.loadCase.fillLevels.tank = 1.5;
+    expect(loadDesign(overfull).ok).toBe(false);
+    const negative = JSON.parse(JSON.stringify(sampleDesign()));
+    negative.vehicle.gvwr = -1;
+    expect(loadDesign(negative).ok).toBe(false);
+  });
+
   it("rejects things that are not designs", () => {
     for (const raw of [null, undefined, 42, "design", [], {}]) {
       expect(loadDesign(raw).ok).toBe(false);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { partExtents, sceneObstacles } from "../parts/parts";
+import { obstaclesFor, partExtents, sceneObstacles } from "../parts/parts";
 import { findIssues } from "../snap/issues";
 import {
   emptyShell,
@@ -146,6 +146,52 @@ describe("ridersOf", () => {
   it("ignores parts beside it, parts at another height and parts that do not carry", () => {
     expect(ridersOf(doc, lookup, "beside")).toEqual([]);
     expect(ridersOf(testDesign([testPart("crate", "crate", 500, 0)]), lookup, "crate")).toEqual([]);
+  });
+});
+
+describe("parts inside furniture", () => {
+  // A 1200 x 600 x 900 cabinet with an 800 x 400 x 300 tank fully inside it.
+  const cabinet = testPart("cabinet", "cabinet", 1000, -600);
+  const inside = testPart("tank", "tank", 1000, -600);
+  const halfOut = testPart("tank", "tank", 1500, -600);
+  const crateInside = testPart("crate", "crate", 1000, -600);
+
+  it("accepts a component fully inside hollow furniture", () => {
+    expect(findIssues(testDesign([cabinet, inside]), emptyShell, lookup)).toEqual([]);
+  });
+
+  it("flags a component that is half in, half out", () => {
+    expect(findIssues(testDesign([cabinet, halfOut]), emptyShell, lookup)).toEqual([
+      { partId: "cabinet", kind: "collision", withIds: ["tank"] },
+      { partId: "tank", kind: "collision", withIds: ["cabinet"] },
+    ]);
+  });
+
+  it("still flags ordinary parts inside furniture", () => {
+    expect(findIssues(testDesign([cabinet, crateInside]), emptyShell, lookup)).toHaveLength(2);
+  });
+
+  it("treats everything as solid when no definitions are given", () => {
+    expect(findIssues(testDesign([cabinet, inside]), emptyShell)).toHaveLength(2);
+  });
+
+  it("leaves compatible furniture out of a component's obstacles, and the reverse", () => {
+    const doc = testDesign([cabinet, inside, testPart("crate", "crate", 2000, 0)]);
+    const ids = (part: typeof cabinet) =>
+      obstaclesFor(doc, emptyShell, lookup, part).map((o) => o.id);
+    expect(ids(inside)).toEqual(["crate"]);
+    expect(ids(cabinet)).toEqual(["crate"]);
+    expect(ids(testPart("crate", "crate", 2000, 0))).toEqual(["cabinet", "tank"]);
+  });
+
+  it("takes what is inside along as a rider", () => {
+    const onTop = testPart("box", "box", 1000, -600, 900);
+    const doc = testDesign([cabinet, inside, onTop, testPart("far", "tank", 2500, 400)]);
+    expect(ridersOf(doc, lookup, "cabinet")).toEqual(["box", "tank"]);
+  });
+
+  it("does not take a half-inside component along", () => {
+    expect(ridersOf(testDesign([cabinet, halfOut]), lookup, "cabinet")).toEqual([]);
   });
 });
 

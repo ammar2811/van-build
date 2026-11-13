@@ -8,6 +8,7 @@ import {
   computeWeight,
   designLoads,
   designWeight,
+  effectiveChassis,
   type PointLoad,
   requireChassis,
   type WeightInput,
@@ -194,7 +195,7 @@ describe("design weight", () => {
       testPart("b", "crate", 2365, 200),
       testPart("a", "cabinet", 1000, -600),
     ]);
-    expect(designLoads(doc, lookupTestDefinition)).toEqual([
+    expect(designLoads(doc, testShell, lookupTestDefinition)).toEqual([
       { id: "a", mass: 40_000, cg: { x: 1000, y: -600, z: 450 } },
       { id: "b", mass: 10_000, cg: { x: 2365, y: 200, z: 250 } },
     ]);
@@ -203,7 +204,7 @@ describe("design weight", () => {
   it("includes contents and honours a mass override", () => {
     const tank = testPart("tank", "tank", 1500, 0);
     const heavy = { ...testPart("crate", "crate", 500, 0), overrides: { mass: 75_000 } };
-    const loads = designLoads(testDesign([tank, heavy]), lookupTestDefinition);
+    const loads = designLoads(testDesign([tank, heavy]), testShell, lookupTestDefinition);
     expect(loads.map((load) => load.mass)).toEqual([75_000, 96_000]);
   });
 
@@ -212,6 +213,73 @@ describe("design weight", () => {
     const report = designWeight(doc, testShell, lookupTestDefinition);
     expect(report.rear.load).toBeCloseTo(chassis.curbRear + 10_000, 6);
     expect(report.front.load).toBeCloseTo(chassis.curbFront, 6);
+  });
+
+  it("replaces only the empty mass when a tank's mass is overridden", () => {
+    const tank = { ...testPart("tank", "tank", 1500, 0), overrides: { mass: 10_000 } };
+    const loads = designLoads(testDesign([tank]), testShell, lookupTestDefinition);
+    // 10 kg tank plus 90 L of water.
+    expect(loads[0]?.mass).toBe(100_000);
+  });
+
+  it("weighs tanks at their fill level", () => {
+    const doc = testDesign([testPart("tank", "tank", 1500, 0)]);
+    const mass = (fill: number | undefined) =>
+      designLoads(
+        {
+          ...doc,
+          loadCase: { ...doc.loadCase, fillLevels: fill === undefined ? {} : { tank: fill } },
+        },
+        testShell,
+        lookupTestDefinition,
+      )[0]?.mass;
+    expect(mass(undefined)).toBe(96_000);
+    expect(mass(1)).toBe(96_000);
+    expect(mass(0.5)).toBe(51_000);
+    expect(mass(0)).toBe(6_000);
+  });
+
+  it("seats people in the cab, driver first, and never more than there are seats", () => {
+    const doc = testDesign([]);
+    const withPeople = (occupants: number) =>
+      designLoads(
+        { ...doc, loadCase: { ...doc.loadCase, occupants } },
+        testShell,
+        lookupTestDefinition,
+      );
+    expect(withPeople(0)).toEqual([]);
+    expect(withPeople(1)).toEqual([
+      { id: "occupant:0", mass: 80_000, cg: { x: -400, y: -450, z: 500 } },
+    ]);
+    expect(withPeople(2).map((load) => load.cg.y)).toEqual([-450, 450]);
+    expect(withPeople(5)).toHaveLength(2);
+  });
+
+  it("puts cab occupants mostly on the front axle", () => {
+    const doc = testDesign([]);
+    const report = designWeight(
+      { ...doc, loadCase: { ...doc.loadCase, occupants: 2 } },
+      testShell,
+      lookupTestDefinition,
+    );
+    // Seats are 900 mm behind the front axle of a 3665 mm wheelbase.
+    const onRear = (160_000 * 900) / 3665;
+    expect(report.rear.load).toBeCloseTo(chassis.curbRear + onRear, 6);
+    expect(report.front.load).toBeCloseTo(chassis.curbFront + 160_000 - onRear, 6);
+    expect(report.cgLateral).toBeCloseTo(0, 9);
+  });
+
+  it("uses the user's own vehicle numbers over the catalog's", () => {
+    const doc = { ...testDesign([]), vehicle: { gvwr: 3_500_000, curbRear: 1_250_000 } };
+    expect(effectiveChassis(testShell, doc)).toEqual({
+      ...chassis,
+      gvwr: 3_500_000,
+      curbRear: 1_250_000,
+    });
+    const report = designWeight(doc, testShell, lookupTestDefinition);
+    expect(report.rear.load).toBe(1_250_000);
+    expect(report.gross.limit).toBe(3_500_000);
+    expect(report.payloadRemaining).toBe(3_500_000 - chassis.curbFront - 1_250_000);
   });
 
   it("fails loudly on an unknown chassis", () => {

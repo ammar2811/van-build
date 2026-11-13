@@ -3,13 +3,19 @@
 An open-source camper van layout planner. Placement that snaps into place, exact dimensions,
 and numbers you can build from.
 
-Status: early. Milestones M0 (foundations) and M1 (2D editor) are done. See [Roadmap](#roadmap).
+Status: early. Milestones M0 to M2 are done: foundations, the 2D editor and the weight model. See [Roadmap](#roadmap).
 
 ## What works today
 
-- A 2D floor plan of a Sprinter 144 High Roof, built from published dimensions with sources.
-- Eleven parts to place: bed platform, mattress, galley, cooktop, cabinets, fridge, bench,
-  toilet, crate and water tank.
+- 2D floor plans of six vans (Sprinter 144/170, Transit 148 medium/high roof, ProMaster
+  136/159), built from published dimensions with every number sourced or marked as an estimate.
+- Live weight: front axle, rear axle and total against their ratings, payload left, and the
+  centre of gravity on the plan, all updating while you drag.
+- People in the cab, tank fill levels, per-part weights, and your own door-sticker and
+  scale-ticket numbers in place of the catalog's.
+- Components can sit inside furniture: a tank in the galley, a battery under a bench.
+- Twelve parts to place: bed platform, mattress, galley, cooktop, cabinets, fridge, bench,
+  toilet, crate, water tank and battery.
 - Drag parts with mouse or finger. They snap to walls, to each other and to a grid, and they
   cannot be pushed through one another.
 - Walls that lean in are modelled: an overhead cabinet stops where the wall is at its height,
@@ -21,7 +27,6 @@ Status: early. Milestones M0 (foundations) and M1 (2D editor) are done. See [Roa
 - Rotate in 90 degree steps, duplicate, lock, undo and redo, keyboard nudging.
 - Your layout is saved in the browser as you work and is still there after a reload.
 - Export a dimensioned floor plan as a vector PDF.
-- A weight and axle-load model in the engine (no panel in the app yet).
 
 ## Getting started
 
@@ -81,7 +86,7 @@ inches exist only at the edge of the UI.
 | --------- | ------------------------------------------------------------- |
 | M0 (done) | Engine, one sourced van, 2D drag and snap spike, PDF export   |
 | M1 (done) | Full 2D editor: more parts, locks, stacking, saved locally    |
-| M2        | Live weight and axle-load panel, all six van shells           |
+| M2 (done) | Live weight and axle-load panel, all six van shells           |
 | M3        | 3D view in sync with the plan, side elevation                 |
 | M4        | Full part catalog, bill of materials, complete build pack PDF |
 | M5        | Accounts, cloud save, share links                             |

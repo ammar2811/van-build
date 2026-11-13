@@ -20,6 +20,10 @@ export const testShell: VanShell = {
   cargoLength: 3000,
   frontAxleX: -1300,
   rearAxleX: 2365,
+  cabSeats: [
+    { x: -400, y: -450, z: 500 },
+    { x: -400, y: 450, z: 500 },
+  ],
   stations: [
     {
       x: 0,
@@ -94,12 +98,13 @@ function definition(
 }
 
 export const testDefinitions: PartDefinition[] = [
-  definition("cabinet", "Cabinet", 1200, 600, 900, 40, { carries: true }),
+  definition("cabinet", "Cabinet", 1200, 600, 900, 40, { carries: true, hollow: true }),
   definition("crate", "Crate", 500, 500, 500, 10),
   definition("box", "Stacking box", 400, 300, 200, 5, { carries: true, stacks: true }),
   definition("deck", "Deck", 1200, 1600, 50, 25, { carries: true, defaultElevation: 600 }),
   definition("shelf", "Overhead shelf", 1000, 300, 350, 8, { defaultElevation: 1400 }),
   definition("tank", "Water tank", 800, 400, 300, 6, {
+    fitsInside: true,
     mass: { fixed: kgToGrams(6), contents: { capacityLitres: 90, gramsPerLitre: 1000 } },
   }),
 ];
@@ -126,6 +131,9 @@ export function testDesign(parts: PartInstance[]): DesignDoc {
     name: "Test layout",
     shellId: testShell.id,
     chassisId: "base",
+    vehicle: {},
+    // Empty cab by default, so tests that are not about people see only the parts.
+    loadCase: { occupants: 0, occupantMass: 80_000, fillLevels: {} },
     parts: Object.fromEntries(parts.map((part) => [part.id, part])),
   };
 }

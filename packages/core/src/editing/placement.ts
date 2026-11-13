@@ -1,4 +1,11 @@
-import { createInstance, partBox, partExtents, sceneObstacles } from "../parts/parts";
+import {
+  createInstance,
+  type DefinitionLookup,
+  obstaclesFor,
+  partBox,
+  partExtents,
+  sceneObstacles,
+} from "../parts/parts";
 import type { DesignDoc } from "../schema/design";
 import { EPS, intervalsOverlap } from "../schema/geometry";
 import type { PartDefinition, PartInstance, Yaw } from "../schema/part";
@@ -143,10 +150,17 @@ function reanchor(
 }
 
 /** Nearest spot where the part fits without overlapping anything. */
-function settle(doc: DesignDoc, shell: VanShell, part: PartInstance): PartInstance {
+function settle(
+  doc: DesignDoc,
+  shell: VanShell,
+  part: PartInstance,
+  definitions?: DefinitionLookup,
+): PartInstance {
   const result = solveDrag({
     shell,
-    obstacles: sceneObstacles(doc, shell, part.id),
+    obstacles: definitions
+      ? obstaclesFor(doc, shell, definitions, part)
+      : sceneObstacles(doc, shell, part.id),
     size: partExtents(part),
     z: part.position.z,
     proposed: { x: part.position.x, y: part.position.y },
@@ -156,10 +170,18 @@ function settle(doc: DesignDoc, shell: VanShell, part: PartInstance): PartInstan
   return withPosition(part, result.position.x, result.position.y);
 }
 
-/** Turn a part a quarter turn, keep it against its walls, then slide it clear of neighbours. */
-export function rotatePart(doc: DesignDoc, shell: VanShell, part: PartInstance): PartInstance {
+/**
+ * Turn a part a quarter turn, keep it against its walls, then slide it clear of neighbours.
+ * Pass `definitions` so components inside furniture are not treated as in the way.
+ */
+export function rotatePart(
+  doc: DesignDoc,
+  shell: VanShell,
+  part: PartInstance,
+  definitions?: DefinitionLookup,
+): PartInstance {
   const yaw = ((part.yaw + 90) % 360) as Yaw;
-  return settle(doc, shell, reanchor(shell, part, { ...part, yaw }, "centre"));
+  return settle(doc, shell, reanchor(shell, part, { ...part, yaw }, "centre"), definitions);
 }
 
 /**
@@ -188,6 +210,7 @@ export function placeNewPart(
   const size = partExtents(fresh);
   // Start from a spot on the 10 mm grid so new parts get round numbers.
   const x = Math.round((shell.cargoLength / 2 - size.x / 2) / 10) * 10 + size.x / 2;
+  // No definitions passed on purpose: a new part starts in the open, never inside a cabinet.
   return settle(doc, shell, withPosition(fresh, x, 0));
 }
 

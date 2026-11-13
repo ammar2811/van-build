@@ -1,6 +1,8 @@
 import { getPartDefinition, getShell } from "@vanbuild/catalog";
 import {
+  type Chassis,
   duplicatePart,
+  obstaclesFor,
   type PartInstance,
   partExtents,
   partName,
@@ -9,7 +11,6 @@ import {
   resizePart,
   ridersOf,
   rotatePart,
-  sceneObstacles,
   setClearance,
   setFloorHeight,
   settleOnSupports,
@@ -136,6 +137,7 @@ export function deletePart(id: string): void {
   }
   commit(`Delete ${label(part)}`, (draft) => {
     delete draft.parts[id];
+    delete draft.loadCase.fillLevels[id];
     for (const rider of settled) draft.parts[rider.id] = rider;
   });
   const ui = useUiStore.getState();
@@ -146,7 +148,7 @@ export function rotate(id: string): void {
   const { doc, shell } = current();
   const part = doc.parts[id];
   if (!part || isLocked(part)) return;
-  reshape(`Rotate ${label(part)}`, part, rotatePart(doc, shell, part));
+  reshape(`Rotate ${label(part)}`, part, rotatePart(doc, shell, part, getPartDefinition));
 }
 
 export function resize(id: string, key: "width" | "depth" | "height", value: number): void {
@@ -182,7 +184,7 @@ export function nudge(id: string, dx: number, dy: number): void {
   const riders = ridersOf(doc, getPartDefinition, id);
   const result = solveDrag({
     shell,
-    obstacles: sceneObstacles(doc, shell, [id, ...riders]),
+    obstacles: obstaclesFor(doc, shell, getPartDefinition, part, riders),
     size: partExtents(part),
     z: part.position.z,
     proposed: { x: part.position.x + dx, y: part.position.y + dy },
@@ -221,6 +223,68 @@ export function renameDesign(name: string): void {
 export function clearAll(): void {
   current().commit("Remove all parts", (draft) => {
     draft.parts = {};
+    draft.loadCase.fillLevels = {};
   });
   useUiStore.getState().select(null);
+}
+
+/** Override a part's empty weight, or pass null to go back to the catalog value. */
+export function setPartMass(id: string, grams: number | null): void {
+  const { doc, commit } = current();
+  const part = doc.parts[id];
+  if (!part || isLocked(part)) return;
+  commit(`Set weight of ${label(part)}`, (draft) => {
+    const target = draft.parts[id];
+    if (!target) return;
+    if (grams === null) delete target.overrides.mass;
+    else target.overrides.mass = grams;
+  });
+}
+
+export function setOccupants(count: number): void {
+  const { shell, commit } = current();
+  const occupants = Math.min(Math.max(Math.round(count), 0), shell.cabSeats.length);
+  commit("Change occupants", (draft) => {
+    draft.loadCase.occupants = occupants;
+  });
+}
+
+export function setOccupantMass(grams: number): void {
+  current().commit("Change occupant weight", (draft) => {
+    draft.loadCase.occupantMass = grams;
+  });
+}
+
+/** How full a tank is, from 0 to 1. */
+export function setFillLevel(partId: string, level: number): void {
+  const fill = Math.min(Math.max(level, 0), 1);
+  current().commit("Change fill level", (draft) => {
+    if (fill === 1) delete draft.loadCase.fillLevels[partId];
+    else draft.loadCase.fillLevels[partId] = fill;
+  });
+}
+
+export type VehicleField = keyof Omit<Chassis, "id" | "name">;
+
+/** Use the user's own number for a rating or empty weight, or null for the catalog value. */
+export function setVehicleValue(field: VehicleField, grams: number | null): void {
+  current().commit("Change vehicle weights", (draft) => {
+    if (grams === null) delete draft.vehicle[field];
+    else draft.vehicle[field] = grams;
+  });
+}
+
+/** Switch to another van. Parts stay where they are; the user's vehicle numbers are cleared. */
+export function setShell(shellId: string): void {
+  const { doc, commit } = current();
+  if (shellId === doc.shellId) return;
+  const shell = getShell(shellId);
+  const chassis = shell.chassis[0];
+  if (!chassis) return;
+  commit(`Change van to ${shell.name}`, (draft) => {
+    draft.shellId = shell.id;
+    draft.chassisId = chassis.id;
+    draft.vehicle = {};
+    draft.loadCase.occupants = Math.min(draft.loadCase.occupants, shell.cabSeats.length);
+  });
 }

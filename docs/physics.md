@@ -14,6 +14,18 @@ from the code, so the code is checked against the maths and not against itself.
 
 It is an estimate for planning. It does not replace weighing the finished van on a scale.
 
+## What is on board
+
+The estimate adds three things to the empty van:
+
+- **The build.** Every part, at its own position. A part's weight is the catalog value or the
+  weight you typed for it.
+- **Liquids.** A tank adds its capacity times its fill level, at the tank's position.
+- **People.** Each occupant is a point mass at a cab seat, driver first.
+
+The empty van's axle weights and its three ratings come from the catalog, or from the numbers
+you enter from your door-jamb sticker and a weigh-scale ticket. Your numbers always win.
+
 ## Formulas
 
 `x_i` is how far the centre of gravity of load `i` sits behind the front axle, `m_i` is its

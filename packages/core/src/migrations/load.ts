@@ -1,5 +1,10 @@
 import type { DefinitionLookup } from "../parts/parts";
-import { DESIGN_SCHEMA_VERSION, type DesignDoc, DesignDocSchema } from "../schema/design";
+import {
+  DESIGN_SCHEMA_VERSION,
+  type DesignDoc,
+  DesignDocSchema,
+  defaultLoadCase,
+} from "../schema/design";
 
 /**
  * Loading a saved design. Saved data is never trusted: it is brought up to the current
@@ -7,7 +12,10 @@ import { DESIGN_SCHEMA_VERSION, type DesignDoc, DesignDocSchema } from "../schem
  */
 
 /** One step per schema version: `MIGRATIONS[1]` turns a version 1 document into version 2. */
-const MIGRATIONS: Record<number, (doc: Record<string, unknown>) => Record<string, unknown>> = {};
+const MIGRATIONS: Record<number, (doc: Record<string, unknown>) => Record<string, unknown>> = {
+  // 1 -> 2: weight estimates gained a load case and the user's own vehicle numbers.
+  1: (doc) => ({ ...doc, schemaVersion: 2, vehicle: {}, loadCase: defaultLoadCase() }),
+};
 
 export type LoadResult =
   | { ok: true; doc: DesignDoc; migratedFrom: number | null }

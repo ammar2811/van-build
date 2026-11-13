@@ -10,6 +10,7 @@ import {
   maxHalfWidth,
   minHalfWidth,
   type Obstacle,
+  obstaclesFor,
   outlineAt,
   type PartInstance,
   parseLength,
@@ -21,7 +22,6 @@ import {
   ridersOf,
   type SnapGuide,
   type Sticky,
-  sceneObstacles,
   solveDrag,
   solveStackedDrag,
   supportSurfaces,
@@ -41,7 +41,7 @@ import {
 } from "react";
 import { isLocked, movePart, setGap } from "../../state/actions";
 import { useDocStore } from "../../state/docStore";
-import { useIssues, useShell } from "../../state/selectors";
+import { useIssues, useShell, useWeight } from "../../state/selectors";
 import { useUiStore } from "../../state/uiStore";
 import { FitIcon, MinusIcon, PlusIcon } from "../../ui/icons";
 import { type PlanTransform, screenRect, usePlanTransform } from "./usePlanTransform";
@@ -145,7 +145,15 @@ export function PlanView() {
       const followed = drag?.followers[part.id];
       return followed ? { ...part, position: followed } : part;
     });
-    return live.sort((a, b) => a.position.z - b.position.z || a.id.localeCompare(b.id));
+    // Lower parts first so raised parts draw on top; at the same height, bigger parts first
+    // so a tank inside a cabinet stays visible and clickable.
+    const area = (part: PartInstance) => {
+      const size = partExtents(part);
+      return size.x * size.y;
+    };
+    return live.sort(
+      (a, b) => a.position.z - b.position.z || area(b) - area(a) || a.id.localeCompare(b.id),
+    );
   }, [doc.parts, drag]);
 
   // The live document: what the plan is showing right now, mid-drag included.
@@ -270,7 +278,7 @@ export function PlanView() {
       grab: { x: point.x - part.position.x, y: point.y - part.position.y },
       size: partExtents(part),
       z: part.position.z,
-      obstacles: sceneObstacles(doc, shell, moving),
+      obstacles: obstaclesFor(doc, shell, getPartDefinition, part, riderIds),
       stacking: def?.stacks
         ? {
             supports: supportSurfaces(doc, shell, getPartDefinition, moving),
@@ -486,6 +494,7 @@ export function PlanView() {
           <Openings shell={shell} view={view} />
           <EndLabels shell={shell} view={view} />
 
+          <RearAxle shell={shell} view={view} half={half} />
           {selected && <WallAtHeight shell={shell} view={view} part={selected} />}
 
           {parts.map((part) => (
@@ -500,6 +509,7 @@ export function PlanView() {
             />
           ))}
 
+          <CentreOfGravity shell={shell} view={view} />
           {drag && <Guides guides={drag.guides} shell={shell} view={view} half={half} />}
           {selected && (
             <Clearances
@@ -603,6 +613,44 @@ function FloorGrid({ shell, view, half }: { shell: VanShell; view: PlanTransform
           y2={b.y}
         />
       ))}
+    </g>
+  );
+}
+
+/** Where the rear axle is: loads behind this line lift weight off the front axle. */
+function RearAxle({ shell, view, half }: { shell: VanShell; view: PlanTransform; half: number }) {
+  const a = view.toScreen(shell.rearAxleX, -half);
+  const b = view.toScreen(shell.rearAxleX, half);
+  const label = view.toScreen(shell.rearAxleX, -half - 13 / view.scale);
+  return (
+    <g className="plan-axle">
+      <line x1={a.x} y1={a.y} x2={b.x} y2={b.y} />
+      <text
+        className="plan-note"
+        x={label.x}
+        y={label.y}
+        transform={view.portrait ? `rotate(90 ${label.x} ${label.y})` : undefined}
+      >
+        Rear axle
+      </text>
+    </g>
+  );
+}
+
+/** The loaded van's centre of gravity, live. */
+function CentreOfGravity({ shell, view }: { shell: VanShell; view: PlanTransform }) {
+  const weight = useWeight();
+  const at = view.toScreen(shell.frontAxleX + weight.cgBehindFrontAxle, weight.cgLateral);
+  return (
+    <g
+      className="plan-cg"
+      data-testid="cg-marker"
+      data-cg={Math.round(weight.cgBehindFrontAxle)}
+      transform={`translate(${at.x.toFixed(1)} ${at.y.toFixed(1)})`}
+    >
+      <title>Centre of gravity of the loaded van</title>
+      <circle r="8" className="plan-cg-ring" />
+      <path d="M0 -8A8 8 0 0 1 8 0H0ZM0 8A8 8 0 0 1 -8 0H0Z" className="plan-cg-fill" />
     </g>
   );
 }

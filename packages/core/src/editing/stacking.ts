@@ -1,5 +1,6 @@
 import {
   type DefinitionLookup,
+  isInside,
   type Obstacle,
   partBox,
   partExtents,
@@ -88,7 +89,10 @@ export function solveStackedDrag(input: StackedDragInput): DragResult {
   return solveDrag({ ...input, z: input.baseZ });
 }
 
-/** Ids of the parts resting on a carrier, and on those, and so on. Stable order. */
+/**
+ * Ids of the parts that travel with a part: what rests on top of it, what sits inside it,
+ * and whatever travels with those. Stable order.
+ */
 export function ridersOf(
   doc: DesignDoc,
   definitions: DefinitionLookup,
@@ -98,14 +102,20 @@ export function ridersOf(
   const ids = Object.keys(doc.parts).sort();
   const visit = (id: string) => {
     const carrier = doc.parts[id];
-    if (!carrier || !definitions(carrier.defId)?.carries) return;
+    const def = carrier && definitions(carrier.defId);
+    if (!carrier || !(def?.carries || def?.hollow)) return;
     const box = partBox(carrier);
     for (const otherId of ids) {
       const other = doc.parts[otherId];
       if (!other || otherId === carrierId || otherId === id || riders.includes(otherId)) continue;
-      if (!definitions(other.defId)?.stacks) continue;
-      if (Math.abs(other.position.z - box.max.z) > EPS) continue;
-      if (!covers(box, other.position)) continue;
+      const otherDef = definitions(other.defId);
+      const onTop =
+        def.carries &&
+        otherDef?.stacks &&
+        Math.abs(other.position.z - box.max.z) <= EPS &&
+        covers(box, other.position);
+      const inside = def.hollow && otherDef?.fitsInside && isInside(partBox(other), box);
+      if (!onTop && !inside) continue;
       riders.push(otherId);
       visit(otherId);
     }

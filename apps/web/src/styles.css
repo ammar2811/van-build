@@ -13,6 +13,8 @@
   --accent-soft: #d8efec;
   --danger: #b42318;
   --danger-soft: #fdecea;
+  --warn: #b25e09;
+  --warn-soft: #fdf1dc;
   --guide: #d6249f;
 
   --floor: #ffffff;
@@ -41,6 +43,8 @@
     --accent-soft: #12403b;
     --danger: #ff7a6b;
     --danger-soft: #3a1b18;
+    --warn: #f0a63a;
+    --warn-soft: #3a2a10;
     --guide: #ff5cc8;
 
     --floor: #1f2224;
@@ -968,6 +972,286 @@ input {
   font-variant-numeric: tabular-nums;
 }
 
+/* ---------- Weight ---------- */
+
+.weight {
+  display: grid;
+  gap: 12px;
+  padding: 16px;
+  border-top: 1px solid var(--line);
+}
+
+.weight h2 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.weight h3 {
+  padding-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.weight-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weight-status {
+  padding: 2px 9px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.weight-status[data-status="warn"] {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+
+.weight-status[data-status="over"] {
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.weight-rows {
+  display: grid;
+  gap: 10px;
+}
+
+.weight-row {
+  --tone: var(--accent);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 38px;
+  column-gap: 8px;
+  row-gap: 4px;
+  align-items: center;
+}
+
+.weight-row[data-status="warn"],
+.weight-strip-item[data-status="warn"] {
+  --tone: var(--warn);
+}
+
+.weight-row[data-status="over"],
+.weight-strip-item[data-status="over"] {
+  --tone: var(--danger);
+}
+
+.weight-row-head {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weight-figures {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.weight-figures strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.weight-bar {
+  position: relative;
+  display: block;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg);
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden;
+}
+
+.weight-bar-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 4px;
+  background: var(--tone, var(--accent));
+  transition: width 0.12s ease-out;
+}
+
+/* The 90% warning threshold. */
+.weight-bar-mark {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 90%;
+  width: 1px;
+  background: var(--line-strong);
+}
+
+.weight-percent {
+  color: var(--tone);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.weight-payload {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+}
+
+.weight-payload strong {
+  color: var(--ink);
+  font-size: 16px;
+  font-variant-numeric: tabular-nums;
+}
+
+.weight-payload[data-status="over"] {
+  border-color: var(--danger);
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.weight-payload[data-status="over"] strong {
+  color: var(--danger);
+}
+
+.field > span:first-child {
+  color: var(--muted);
+}
+
+.field-control {
+  display: grid;
+  gap: 2px;
+  justify-items: end;
+}
+
+.field-reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.field-reset:hover {
+  text-decoration: underline;
+}
+
+.field--changed input {
+  border-color: var(--accent);
+}
+
+.field select {
+  width: 100%;
+  height: 32px;
+  padding: 0 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--panel);
+  color: inherit;
+  font: inherit;
+}
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.stepper .icon-button {
+  width: 30px;
+  height: 30px;
+}
+
+.stepper output {
+  min-width: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+.field--slider {
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 4px;
+}
+
+.slider {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider input {
+  width: 100%;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  accent-color: var(--accent);
+}
+
+.slider output {
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.weight-vehicle {
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+}
+
+.weight-vehicle summary {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.weight-vehicle .field-grid {
+  margin: 10px 0;
+}
+
+.plan-axle line {
+  stroke: var(--muted);
+  stroke-width: 1;
+  stroke-dasharray: 2 5;
+  opacity: 0.7;
+}
+
+.plan-cg {
+  pointer-events: none;
+}
+
+.plan-cg-ring {
+  fill: var(--panel);
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+
+.plan-cg-fill {
+  fill: var(--ink);
+}
+
+.weight-strip,
+.sheet {
+  display: none;
+}
+
 /* ---------- Phones and narrow tablets ---------- */
 
 @media (max-width: 820px) {
@@ -1081,7 +1365,8 @@ input {
       "head actions"
       "notice notice"
       "size size"
-      "position position";
+      "position position"
+      "weight weight";
     gap: 8px;
     padding: 10px 12px;
   }
@@ -1166,5 +1451,134 @@ input {
 
   .inspector-done {
     display: inline-flex;
+  }
+
+  /* Stacked beside the van, where a phone has spare room, so the buttons never cover it. */
+  .plan-zoom {
+    right: 8px;
+    bottom: 8px;
+    flex-direction: column-reverse;
+  }
+
+  .plan-zoom .icon-button,
+  .plan-zoom .icon-button:first-child,
+  .plan-zoom .icon-button:last-child {
+    margin: -1px 0 0;
+    border-radius: 0;
+  }
+
+  .plan-zoom .icon-button:first-child {
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  .plan-zoom .icon-button:last-child {
+    margin-top: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  /* Leave the top of the canvas to the weight strip so it never covers the van. */
+  .plan {
+    top: 58px;
+  }
+
+  .weight-strip {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    padding: 7px 10px 9px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .weight-strip-item {
+    --tone: var(--accent);
+    display: grid;
+    gap: 4px;
+  }
+
+  .weight-strip-label {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .weight-strip-label strong {
+    color: var(--tone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .weight-strip .weight-bar {
+    height: 5px;
+  }
+
+  .sheet[open] {
+    display: block;
+    width: 100%;
+    max-width: none;
+    max-height: 88dvh;
+    margin: auto 0 0;
+    padding: 0 0 calc(12px + env(safe-area-inset-bottom));
+    border: 0;
+    border-radius: 16px 16px 0 0;
+    background: var(--panel);
+    color: var(--ink);
+    overflow-y: auto;
+  }
+
+  .sheet::backdrop {
+    background: rgb(0 0 0 / 0.4);
+  }
+
+  .sheet .weight {
+    border-top: 0;
+  }
+
+  .sheet .field {
+    grid-template-columns: minmax(0, 1fr) 150px;
+    row-gap: 0;
+  }
+
+  .sheet .field--slider {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 4px;
+  }
+
+  .sheet .field-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sheet .field label,
+  .sheet .field > span:first-child {
+    font-size: 14px;
+  }
+
+  .sheet .field input[type="text"],
+  .sheet .field select {
+    height: 40px;
+    text-align: right;
+    font-size: 16px;
+  }
+
+  .sheet-close {
+    display: flex;
+    width: calc(100% - 32px);
+    margin: 0 16px;
+  }
+
+  .field-grid--weight {
+    grid-area: weight;
+  }
+
+  .sidebar--inspector .field-control {
+    justify-items: start;
   }
 }

@@ -68,13 +68,15 @@ export function partName(def: PartDefinition, instance: PartInstance): string {
   return instance.overrides.name ?? def.name;
 }
 
-/** Mass in grams: the user's override, or empty mass plus contents at the given fill level. */
+/**
+ * Mass in grams: the empty mass (the user's override, or the catalog value) plus whatever
+ * the part holds at the given fill level.
+ */
 export function partMass(def: PartDefinition, instance: PartInstance, fillLevel = 1): number {
-  if (instance.overrides.mass !== undefined) return instance.overrides.mass;
   const contents = def.mass.contents
     ? def.mass.contents.capacityLitres * def.mass.contents.gramsPerLitre * fillLevel
     : 0;
-  return def.mass.fixed + contents;
+  return (instance.overrides.mass ?? def.mass.fixed) + contents;
 }
 
 /** Price in minor units. */
@@ -117,4 +119,40 @@ export function sceneObstacles(
     if (!skip.has(part.id)) obstacles.push({ id: part.id, box: partBox(part) });
   }
   return obstacles;
+}
+
+/** A component may overlap hollow furniture: a tank inside a galley, a battery under a bench. */
+export function mayOverlap(a: PartDefinition | undefined, b: PartDefinition | undefined): boolean {
+  return Boolean((a?.hollow && b?.fitsInside) || (a?.fitsInside && b?.hollow));
+}
+
+/** Whether `inner` lies entirely within `outer`. */
+export function isInside(inner: Box3, outer: Box3): boolean {
+  const slack = 0.01;
+  return (
+    inner.min.x >= outer.min.x - slack &&
+    inner.max.x <= outer.max.x + slack &&
+    inner.min.y >= outer.min.y - slack &&
+    inner.max.y <= outer.max.y + slack &&
+    inner.min.z >= outer.min.z - slack &&
+    inner.max.z <= outer.max.z + slack
+  );
+}
+
+/**
+ * What a particular part can bump into. Like `sceneObstacles`, minus the furniture it is
+ * allowed to sit inside (or, for furniture, the components allowed to sit inside it).
+ */
+export function obstaclesFor(
+  doc: DesignDoc,
+  shell: VanShell,
+  definitions: DefinitionLookup,
+  part: PartInstance,
+  exclude: readonly string[] = [],
+): Obstacle[] {
+  const def = definitions(part.defId);
+  return sceneObstacles(doc, shell, [part.id, ...exclude]).filter((obstacle) => {
+    const other = doc.parts[obstacle.id];
+    return !other || !mayOverlap(def, definitions(other.defId));
+  });
 }

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Box3Schema } from "./geometry";
+import { Box3Schema, Vec3Schema } from "./geometry";
 
 /** One point of an interior cross-section: half the interior width at height z. */
 export const ProfilePointSchema = z.object({
@@ -76,6 +76,8 @@ export const VanShellSchema = z.object({
   /** Axle centrelines in the van frame. The front axle is ahead of the cargo area, so negative. */
   frontAxleX: z.number(),
   rearAxleX: z.number(),
+  /** Where people sit in the cab (centre of mass of a seated person), driver first. */
+  cabSeats: z.array(Vec3Schema).min(1),
   stations: z.array(StationSchema).min(1),
   wheelWells: z.array(Box3Schema),
   openings: z.array(OpeningSchema),
@@ -94,6 +96,7 @@ export function requiredProvenanceKeys(shell: VanShell): string[] {
     "wheelbase",
     "cargoLength",
     "rearAxleX",
+    "cabSeats",
     "floorWidth",
     "interiorHeight",
     "wallProfile",

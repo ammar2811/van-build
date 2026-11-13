@@ -2,12 +2,13 @@ import {
   createInstance,
   DESIGN_SCHEMA_VERSION,
   type DesignDoc,
+  defaultLoadCase,
   type PartInstance,
   partExtents,
   setWallDistance,
 } from "@vanbuild/core";
 import { partDefinitions } from "./parts/definitions";
-import { sprinter144HighRoof } from "./shells/sprinter-144-high-roof";
+import { sprinter144HighRoof } from "./shells/sprinter";
 
 function definition(id: string) {
   const def = partDefinitions.find((d) => d.id === id);
@@ -56,6 +57,8 @@ export function starterDesign(): DesignDoc {
     name: "My Sprinter 144",
     shellId: shell.id,
     chassisId: "worker-rwd-diesel",
+    vehicle: {},
+    loadCase: defaultLoadCase(),
     parts: { bed, mattress, galley, fridge, water },
   };
 }

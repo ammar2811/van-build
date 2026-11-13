@@ -90,16 +90,38 @@ export function computeWeight(input: WeightInput): WeightReport {
   };
 }
 
-/** Each part as a point mass at the centre of its box, in a stable order. */
-export function designLoads(doc: DesignDoc, definitions: DefinitionLookup): PointLoad[] {
-  return Object.keys(doc.parts)
+/** The vehicle's ratings and empty weights, with the user's own numbers on top. */
+export function effectiveChassis(shell: VanShell, doc: DesignDoc): Chassis {
+  const chassis = requireChassis(shell, doc.chassisId);
+  return { ...chassis, ...doc.vehicle };
+}
+
+export const OCCUPANT_PREFIX = "occupant:";
+
+/**
+ * Everything the weight estimate adds to the empty van, in a stable order: each part as a
+ * point mass at the centre of its box (tanks at their fill level), then the people in the cab.
+ */
+export function designLoads(
+  doc: DesignDoc,
+  shell: VanShell,
+  definitions: DefinitionLookup,
+): PointLoad[] {
+  const loads = Object.keys(doc.parts)
     .sort()
     .flatMap((id) => {
       const part = doc.parts[id];
       if (!part) return [];
       const def = requireDefinition(definitions, part.defId);
-      return [{ id, mass: partMass(def, part), cg: boxCentre(partBox(part)) }];
+      const fill = doc.loadCase.fillLevels[id] ?? 1;
+      return [{ id, mass: partMass(def, part, fill), cg: boxCentre(partBox(part)) }];
     });
+  const seated = Math.min(doc.loadCase.occupants, shell.cabSeats.length);
+  for (let seat = 0; seat < seated; seat++) {
+    const cg = shell.cabSeats[seat];
+    if (cg) loads.push({ id: `${OCCUPANT_PREFIX}${seat}`, mass: doc.loadCase.occupantMass, cg });
+  }
+  return loads;
 }
 
 export function requireChassis(shell: VanShell, chassisId: string): Chassis {
@@ -116,7 +138,7 @@ export function designWeight(
   return computeWeight({
     frontAxleX: shell.frontAxleX,
     rearAxleX: shell.rearAxleX,
-    chassis: requireChassis(shell, doc.chassisId),
-    loads: designLoads(doc, definitions),
+    chassis: effectiveChassis(shell, doc),
+    loads: designLoads(doc, shell, definitions),
   });
 }

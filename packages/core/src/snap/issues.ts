@@ -1,4 +1,10 @@
-import { partBox, sceneObstacles } from "../parts/parts";
+import {
+  type DefinitionLookup,
+  isInside,
+  mayOverlap,
+  partBox,
+  sceneObstacles,
+} from "../parts/parts";
 import type { DesignDoc } from "../schema/design";
 import { boxesOverlap, EPS } from "../schema/geometry";
 import type { VanShell } from "../schema/shell";
@@ -17,16 +23,28 @@ export interface PartIssue {
  * Problems a design can be saved with. Typed values are always accepted, so a part can end
  * up overlapping another or poking through a wall; this is what the editor flags in red.
  */
-export function findIssues(doc: DesignDoc, shell: VanShell): PartIssue[] {
+export function findIssues(
+  doc: DesignDoc,
+  shell: VanShell,
+  definitions?: DefinitionLookup,
+): PartIssue[] {
   const issues: PartIssue[] = [];
   const ids = Object.keys(doc.parts).sort();
   for (const id of ids) {
     const part = doc.parts[id];
     if (!part) continue;
     const box = partBox(part);
+    const def = definitions?.(part.defId);
 
     const withIds = sceneObstacles(doc, shell, id)
-      .filter((o) => boxesOverlap(box, o.box))
+      .filter((o) => {
+        if (!boxesOverlap(box, o.box)) return false;
+        // A component fully inside hollow furniture is where it belongs. Half in, half out
+        // is still a collision.
+        const other = doc.parts[o.id];
+        if (!other || !mayOverlap(def, definitions?.(other.defId))) return true;
+        return !(isInside(box, o.box) || isInside(o.box, box));
+      })
       .map((o) => o.id)
       .sort();
     if (withIds.length > 0) issues.push({ partId: id, kind: "collision", withIds });

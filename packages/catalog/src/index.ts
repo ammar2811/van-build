@@ -1,11 +1,20 @@
 import type { PartDefinition, VanShell } from "@vanbuild/core";
 import { partDefinitions } from "./parts/definitions";
-import { sprinter144HighRoof } from "./shells/sprinter-144-high-roof";
+import { promaster136HighRoof, promaster159HighRoof } from "./shells/promaster";
+import { sprinter144HighRoof, sprinter170HighRoof } from "./shells/sprinter";
+import { transit148HighRoof, transit148MediumRoof } from "./shells/transit";
 
 export { partDefinitions } from "./parts/definitions";
 export { starterDesign } from "./starter";
 
-export const shells: VanShell[] = [sprinter144HighRoof];
+export const shells: VanShell[] = [
+  sprinter144HighRoof,
+  sprinter170HighRoof,
+  transit148MediumRoof,
+  transit148HighRoof,
+  promaster136HighRoof,
+  promaster159HighRoof,
+];
 
 const shellsById = new Map(shells.map((shell) => [shell.id, shell]));
 const definitionsById = new Map(partDefinitions.map((def) => [def.id, def]));

@@ -91,6 +91,86 @@ describe("Sprinter 144 High Roof", () => {
   });
 });
 
+describe("Sprinter 170 High Roof", () => {
+  const shell = getShell("sprinter-170-high-roof");
+
+  it("carries the published numbers", () => {
+    expect(shell.wheelbase).toBe(4318);
+    expect(shell.cargoLength).toBe(4394.2);
+    expect(shell.chassis[0]).toMatchObject({
+      gvwr: 4_105_011,
+      curbFront: 1_001_532,
+      curbRear: 1_383_457,
+    });
+  });
+
+  it("shares its cab and cross-section with the 144", () => {
+    const short = getShell("sprinter-144-high-roof");
+    expect(shell.stations).toEqual(short.stations);
+    expect(shell.cabSeats).toEqual(short.cabSeats);
+    // Same cab, so the front axle sits the same distance ahead (to within inch rounding).
+    expect(Math.abs(shell.frontAxleX - short.frontAxleX)).toBeLessThan(30);
+  });
+});
+
+describe("the six v1 vans", () => {
+  it("are all in the catalog", () => {
+    expect(shells.map((shell) => shell.id)).toEqual([
+      "sprinter-144-high-roof",
+      "sprinter-170-high-roof",
+      "transit-148-medium-roof",
+      "transit-148-high-roof",
+      "promaster-136-high-roof",
+      "promaster-159-high-roof",
+    ]);
+  });
+
+  it("carry the published Transit numbers", () => {
+    const medium = getShell("transit-148-medium-roof");
+    const high = getShell("transit-148-high-roof");
+    expect(medium.wheelbase).toBe(3749);
+    expect(medium.cargoLength).toBe(3650);
+    expect(interiorHeightAt(medium, 0)).toBe(1828.8);
+    expect(interiorHeightAt(high, 0)).toBe(2070.1);
+    // 5,204 lb and 5,299 lb total base curb weight.
+    for (const [shell, pounds] of [
+      [medium, 5204],
+      [high, 5299],
+    ] as const) {
+      const chassis = shell.chassis[0];
+      expect((chassis?.curbFront ?? 0) + (chassis?.curbRear ?? 0)).toBeCloseTo(
+        pounds * 453.59237,
+        -1,
+      );
+      expect(chassis?.gvwr).toBe(4_114_083);
+    }
+  });
+
+  it("carry the published ProMaster numbers", () => {
+    const short = getShell("promaster-136-high-roof");
+    const long = getShell("promaster-159-high-roof");
+    expect(short.cargoLength).toBe(3119.1);
+    expect(long.cargoLength).toBe(3705.9);
+    expect(short.stations[0]?.profile[0]?.halfWidth).toBeCloseTo(932.2, 1);
+    expect(interiorHeightAt(short, 0)).toBe(1930.4);
+    expect(short.chassis[0]).toMatchObject({
+      gvwr: 4_036_972,
+      gawrFront: 2_100_133,
+      gawrRear: 2_399_957,
+    });
+    // Same cab on both lengths, so the front axle sits the same distance ahead.
+    expect(Math.abs(short.frontAxleX - long.frontAxleX)).toBeLessThan(10);
+  });
+
+  it("flags every estimated weight as an estimate", () => {
+    const transit = getShell("transit-148-medium-roof");
+    for (const field of ["gawrFront", "gawrRear", "curbFront", "curbRear"]) {
+      expect(transit.provenance[`chassis.t250-rwd-gas.${field}`]?.source).toBe(ESTIMATED);
+    }
+    expect(transit.provenance["chassis.t250-rwd-gas.gvwr"]?.source).not.toBe(ESTIMATED);
+  });
+});
+
 describe("part definitions", () => {
   it("have unique ids", () => {
     expect(new Set(partDefinitions.map((def) => def.id)).size).toBe(partDefinitions.length);
@@ -130,7 +210,7 @@ describe("starter design", () => {
   });
 
   it("has nothing overlapping or outside the van", () => {
-    expect(findIssues(doc, shell)).toEqual([]);
+    expect(findIssues(doc, shell, getPartDefinition)).toEqual([]);
   });
 
   it("sits flush where it is meant to", () => {
@@ -147,7 +227,8 @@ describe("starter design", () => {
 
   it("stays within the axle and gross ratings", () => {
     const report = designWeight(doc, shell, getPartDefinition);
-    expect(report.added).toBe(30_000 + 15_000 + 38_000 + 21_000 + 106_000);
+    // The build, plus two people in the cab.
+    expect(report.added).toBe(30_000 + 15_000 + 38_000 + 21_000 + 106_000 + 2 * 80_000);
     expect(report.front.status).toBe("ok");
     expect(report.rear.status).toBe("ok");
     expect(report.gross.status).toBe("ok");
