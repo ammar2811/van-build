@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from "react";
+import { PartsList } from "../bom/PartsList";
 import { Inspector } from "../editor/Inspector";
 import { Palette } from "../editor/Palette";
 import { PlanView } from "../editor/plan/PlanView";
@@ -50,6 +51,11 @@ export function App() {
           {mode === "side" && (
             <div className="view">
               <SideView />
+            </div>
+          )}
+          {mode === "parts" && (
+            <div className="view">
+              <PartsList />
             </div>
           )}
           {show3d && (

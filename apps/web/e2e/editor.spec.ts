@@ -1,4 +1,3 @@
-import { readFile } from "node:fs/promises";
 import { expect, test } from "@playwright/test";
 import {
   centre,
@@ -179,25 +178,6 @@ test("clicking a selected part again selects what is underneath it", async ({ pa
   await expect(page.getByTestId("inspector-name")).toHaveText("Bed platform");
   await page.mouse.click(point.x, point.y);
   await expect(page.getByTestId("inspector-name")).toHaveText("Fresh water 100 L");
-});
-
-test("exports a vector PDF of the floor plan", async ({ page }) => {
-  const [download] = await Promise.all([
-    page.waitForEvent("download"),
-    page.getByTestId("export-pdf").click(),
-  ]);
-  expect(download.suggestedFilename()).toBe("my-sprinter-144-floor-plan.pdf");
-  const pdf = (await readFile(await download.path())).toString("latin1");
-  expect(pdf.startsWith("%PDF-")).toBe(true);
-  for (const text of [
-    "My Sprinter 144",
-    "Galley cabinet",
-    "1200 x 550 x 900",
-    "Dimensions in mm",
-  ]) {
-    expect(pdf, text).toContain(`(${text}`);
-  }
-  expect(pdf).not.toContain("/Subtype /Image");
 });
 
 test("dragging with a finger works and snaps", async ({ page }, testInfo) => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { partBox } from "../parts/parts";
+import { initialElevation, partBox, ROOF_THICKNESS } from "../parts/parts";
 import { findIssues } from "../snap/issues";
 import {
   lookupTestDefinition,
@@ -187,6 +187,35 @@ describe("placeNewPart", () => {
       doc = { ...doc, parts: { ...doc.parts, [placed.id]: placed } };
       expect(findIssues(doc, testShell)).toEqual([]);
     }
+  });
+});
+
+describe("roof-mounted parts", () => {
+  const panel = {
+    ...lookupTestDefinition("crate"),
+    id: "panel",
+    mount: "roof",
+  } as NonNullable<ReturnType<typeof lookupTestDefinition>>;
+  const lookup = (id: string) => (id === "panel" ? panel : lookupTestDefinition(id));
+
+  it("start on the roof, above the ceiling", () => {
+    expect(initialElevation(testShell, panel)).toBe(1900 + ROOF_THICKNESS);
+    const placed = placeNewPart(testDesign([]), testShell, panel, "p");
+    expect(placed.position.z).toBe(1960);
+  });
+
+  it("are not flagged for being above the ceiling, when definitions are known", () => {
+    const placed = placeNewPart(testDesign([]), testShell, panel, "p");
+    expect(findIssues(testDesign([placed]), testShell, lookup)).toEqual([]);
+    expect(findIssues(testDesign([placed]), testShell)).toEqual([
+      { partId: "p", kind: "tooTall", withIds: [] },
+    ]);
+  });
+
+  it("do not collide with what is inside the van", () => {
+    const placed = placeNewPart(testDesign([]), testShell, panel, "p");
+    const below = testPart("c", "crate", placed.position.x, placed.position.y);
+    expect(findIssues(testDesign([placed, below]), testShell, lookup)).toEqual([]);
   });
 });
 

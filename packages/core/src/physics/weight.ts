@@ -1,4 +1,10 @@
-import { type DefinitionLookup, partBox, partMass, requireDefinition } from "../parts/parts";
+import {
+  type DefinitionLookup,
+  fillLevelOf,
+  partBox,
+  partMass,
+  requireDefinition,
+} from "../parts/parts";
 import type { DesignDoc } from "../schema/design";
 import { boxCentre, type Vec3 } from "../schema/geometry";
 import type { Chassis, VanShell } from "../schema/shell";
@@ -113,8 +119,8 @@ export function designLoads(
       const part = doc.parts[id];
       if (!part) return [];
       const def = requireDefinition(definitions, part.defId);
-      const fill = doc.loadCase.fillLevels[id] ?? 1;
-      return [{ id, mass: partMass(def, part, fill), cg: boxCentre(partBox(part)) }];
+      const mass = partMass(def, part, fillLevelOf(doc, def, id));
+      return [{ id, mass, cg: boxCentre(partBox(part)) }];
     });
   const seated = Math.min(doc.loadCase.occupants, shell.cabSeats.length);
   for (let seat = 0; seat < seated; seat++) {

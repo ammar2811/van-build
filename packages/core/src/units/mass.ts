@@ -18,15 +18,6 @@ export function formatMass(grams: number, system: UnitSystem): string {
   return `${Math.round(grams / GRAMS_PER_POUND)} lb`;
 }
 
-/** Money is stored in minor units (cents). */
-export function formatMoney(minor: number, currency: string): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: minor % 100 === 0 ? 0 : 2,
-  }).format(minor / 100);
-}
-
 export type ParsedMass = { ok: true; grams: number } | { ok: false; error: string };
 
 const MASS_RE = /^(\d+\.?\d*|\.\d+)\s*(kg|g|lb|lbs|t)?$/;

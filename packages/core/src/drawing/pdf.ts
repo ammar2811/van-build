@@ -8,17 +8,35 @@ function level(gray: number): number {
 }
 
 /**
- * Render a drawing as a vector PDF. Kept behind its own entry point (`@vanbuild/core/pdf`)
- * so the PDF library is only loaded when someone actually exports.
+ * Render drawings as one vector PDF, a page per drawing. Kept behind its own entry point
+ * (`@vanbuild/core/pdf`) so the PDF library is only loaded when someone actually exports.
  */
-export function drawingToPdf(drawing: Drawing): ArrayBuffer {
+export function drawingsToPdf(drawings: readonly Drawing[], title?: string): ArrayBuffer {
+  const [first, ...rest] = drawings;
+  if (!first) throw new Error("A PDF needs at least one drawing");
+  const orientation = (drawing: Drawing) =>
+    drawing.width >= drawing.height ? "landscape" : "portrait";
   const pdf = new jsPDF({
     unit: "mm",
-    format: [drawing.width, drawing.height],
-    orientation: drawing.width >= drawing.height ? "landscape" : "portrait",
+    format: [first.width, first.height],
+    orientation: orientation(first),
     compress: false,
   });
-  pdf.setProperties({ title: drawing.title, creator: "Van Build" });
+  pdf.setProperties({ title: title ?? first.title, creator: "Van Build" });
+  paint(pdf, first);
+  for (const drawing of rest) {
+    pdf.addPage([drawing.width, drawing.height], orientation(drawing));
+    paint(pdf, drawing);
+  }
+  return pdf.output("arraybuffer");
+}
+
+/** Render one drawing as a single-page vector PDF. */
+export function drawingToPdf(drawing: Drawing): ArrayBuffer {
+  return drawingsToPdf([drawing]);
+}
+
+function paint(pdf: jsPDF, drawing: Drawing): void {
   pdf.setLineCap("round");
   pdf.setLineJoin("round");
 
@@ -70,5 +88,4 @@ export function drawingToPdf(drawing: Drawing): ArrayBuffer {
       }
     }
   }
-  return pdf.output("arraybuffer");
 }

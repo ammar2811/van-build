@@ -5,6 +5,7 @@ const OPTIONS: { value: ViewMode; label: string; name: string; wideOnly?: boolea
   { value: "side", label: "Side", name: "Side elevation" },
   { value: "3d", label: "3D", name: "3D view" },
   { value: "split", label: "Split", name: "Plan and 3D side by side", wideOnly: true },
+  { value: "parts", label: "Parts", name: "Parts list and costs" },
 ];
 
 /** Which view of the design is showing. All of them show the same document. */

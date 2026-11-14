@@ -1,6 +1,7 @@
 import {
   createInstance,
   type DefinitionLookup,
+  initialElevation,
   obstaclesFor,
   partBox,
   partExtents,
@@ -205,7 +206,7 @@ export function placeNewPart(
   def: PartDefinition,
   id: string,
 ): PartInstance {
-  const z = def.defaultElevation ?? 0;
+  const z = initialElevation(shell, def);
   const fresh = createInstance(def, id, { x: shell.cargoLength / 2, y: 0, z });
   const size = partExtents(fresh);
   // Start from a spot on the 10 mm grid so new parts get round numbers.

@@ -26,7 +26,7 @@ export interface DragState {
 }
 
 /** Which view of the design is showing. "split" is the plan and the 3D view side by side. */
-export type ViewMode = "plan" | "side" | "3d" | "split";
+export type ViewMode = "plan" | "side" | "3d" | "split" | "parts";
 
 interface UiState {
   selectedId: string | null;

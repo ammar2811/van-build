@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210" font-family="Helvetica, Arial, sans-serif" stroke-linecap="round" stroke-linejoin="round">
+<title>Test layout - parts list</title>
+<rect width="297" height="210" fill="rgb(255,255,255)"/>
+<rect x="10" y="10" width="277" height="190" fill="none" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="10" y1="186" x2="287" y2="186" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="14" y="192" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Test layout</text>
+<text x="14" y="197" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">Test Van - parts list</text>
+<text x="148.5" y="194.5" font-size="2.4" text-anchor="middle" fill="rgb(89,89,89)">Catalog prices are rough guides. Check current prices before buying.</text>
+<text x="283" y="192" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">4 parts, $400</text>
+<text x="283" y="197" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">Dimensions in mm - 2026-11-13 - sheet 4 of 4</text>
+<text x="14" y="18" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Parts list</text>
+<text x="31.83" y="26.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Qty</text>
+<text x="33.83" y="26.2" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Part</text>
+<text x="127.98" y="26.2" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Category</text>
+<text x="165.64" y="26.2" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">W x D x H</text>
+<text x="252.41" y="26.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Each</text>
+<text x="282" y="26.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Total</text>
+<line x1="14" y1="27.6" x2="283" y2="27.6" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="31.83" y="30.8" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">1</text>
+<text x="33.83" y="30.8" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Cabinet</text>
+<text x="127.98" y="30.8" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Storage</text>
+<text x="165.64" y="30.8" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">1200 x 600 x 900 mm</text>
+<text x="252.41" y="30.8" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<text x="282" y="30.8" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<line x1="14" y1="32.2" x2="283" y2="32.2" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="31.83" y="35.4" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">1</text>
+<text x="33.83" y="35.4" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Crate</text>
+<text x="127.98" y="35.4" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Storage</text>
+<text x="165.64" y="35.4" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">500 x 500 x 500 mm</text>
+<text x="252.41" y="35.4" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<text x="282" y="35.4" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<line x1="14" y1="36.8" x2="283" y2="36.8" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="31.83" y="40" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">1</text>
+<text x="33.83" y="40" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Overhead shelf</text>
+<text x="127.98" y="40" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Storage</text>
+<text x="165.64" y="40" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">1000 x 300 x 350 mm</text>
+<text x="252.41" y="40" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<text x="282" y="40" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<line x1="14" y1="41.4" x2="283" y2="41.4" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="31.83" y="44.6" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">1</text>
+<text x="33.83" y="44.6" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Water tank</text>
+<text x="127.98" y="44.6" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Storage</text>
+<text x="165.64" y="44.6" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">800 x 400 x 300 mm</text>
+<text x="252.41" y="44.6" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<text x="282" y="44.6" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">$100</text>
+<line x1="14" y1="46" x2="283" y2="46" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<line x1="14" y1="46" x2="283" y2="46" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="31.83" y="49.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">4</text>
+<text x="33.83" y="49.2" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Total</text>
+<text x="282" y="49.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">$400</text>
+<text x="283" y="184" font-size="2" text-anchor="end" fill="rgb(89,89,89)">Parts with the same name, size and price are counted together. A price typed on a part replaces the catalog price.</text>
+</svg>

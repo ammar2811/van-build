@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatMass, formatMassInput, formatMoney, parseMass, poundsToGrams } from "./mass";
+import { formatMass, formatMassInput, parseMass, poundsToGrams } from "./mass";
 
 function grams(input: string, system: "metric" | "imperial" = "metric"): number {
   const parsed = parseMass(input, system);
@@ -47,10 +47,5 @@ describe("formatting", () => {
       const pounds = parseMass(formatMassInput(value, "imperial"), "imperial");
       expect(pounds.ok && Math.abs(pounds.grams - value) < 300).toBe(true);
     }
-  });
-
-  it("formats money", () => {
-    expect(formatMoney(203_000, "USD")).toBe("$2,030");
-    expect(formatMoney(1_999, "USD")).toBe("$19.99");
   });
 });

@@ -1,0 +1,9 @@
+Quantity,Part,Category,Width (mm),Depth (mm),Height (mm),Unit price (USD),Total (USD),Link
+1,Cabinet,storage,1200,600,900,100.00,100.00,
+1,Crate,storage,600,500,500,100.00,100.00,
+2,Crate,storage,500,500,500,100.00,200.00,
+1,Overhead shelf,storage,1000,300,350,45.50,45.50,
+1,Overhead shelf,storage,1000,300,350,100.00,100.00,
+1,"Pantry, 24""",storage,1200,600,900,100.00,100.00,
+1,Water tank,storage,800,400,300,100.00,100.00,
+8,Total,,,,,,745.50,

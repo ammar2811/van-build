@@ -25,6 +25,7 @@
 <text x="199.33" y="78.4" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">4</text>
 <text x="199.33" y="81.8" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Water tank</text>
 <rect x="59.33" y="107.89" width="66.67" height="20" fill="none" stroke="rgb(0,0,0)" stroke-width="0.3" stroke-dasharray="1.2 0.8"/>
+<rect x="60.13" y="108.79" width="23.23" height="3.5" fill="rgb(255,255,255)" stroke="none"/>
 <text x="60.83" y="111.49" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">3  Overhead shelf</text>
 <line x1="26" y1="139" x2="26" y2="147.2" stroke="rgb(0,0,0)" stroke-width="0.18"/>
 <line x1="226" y1="139" x2="226" y2="147.2" stroke="rgb(0,0,0)" stroke-width="0.18"/>

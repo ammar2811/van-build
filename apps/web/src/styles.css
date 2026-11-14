@@ -496,8 +496,45 @@ input {
   color: var(--muted);
 }
 
-.palette h2 {
-  padding: 0 4px 10px;
+.palette-head {
+  display: grid;
+  gap: 10px;
+  padding: 0 4px 12px;
+}
+
+.palette-search {
+  width: 100%;
+  height: 32px;
+  padding: 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--panel);
+}
+
+.palette-search:hover {
+  border-color: var(--muted);
+}
+
+.palette-search:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+.palette-group + .palette-group {
+  margin-top: 14px;
+}
+
+.palette-group h3 {
+  padding: 0 4px 4px;
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.palette-empty {
+  padding: 4px;
+  color: var(--muted);
 }
 
 .palette ul {
@@ -1333,6 +1370,191 @@ input {
 
 /* ---------- Phones and narrow tablets ---------- */
 
+/* ---------- Menus ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.menu {
+  position: relative;
+}
+
+.menu-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  display: grid;
+  gap: 2px;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 16px));
+  padding: 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.menu-item {
+  display: grid;
+  gap: 1px;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--accent-soft);
+}
+
+.menu-item-label {
+  font-weight: 500;
+}
+
+.menu-item-detail {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- Parts list ---------- */
+
+.parts-list {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  background: var(--panel);
+}
+
+.parts-list-inner {
+  display: grid;
+  gap: 14px;
+  max-width: 860px;
+  margin: 0 auto;
+  /* Room at the top for the view switch that floats over the canvas. */
+  padding: 64px 24px 32px;
+}
+
+.parts-list-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.parts-list-head h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.parts-list-empty {
+  padding: 40px 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  color: var(--muted);
+  text-align: center;
+}
+
+.parts-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+
+.parts-table th,
+.parts-table td {
+  padding: 0 10px;
+  border-bottom: 1px solid var(--line);
+  font-weight: 400;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.parts-table thead th {
+  height: 32px;
+  border-bottom-color: var(--line-strong);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.parts-table tbody td,
+.parts-table tbody th {
+  height: 48px;
+}
+
+.parts-table tbody th {
+  width: 100%;
+  padding: 0;
+  white-space: normal;
+}
+
+.parts-table .is-number {
+  text-align: right;
+}
+
+.parts-table tbody tr:hover {
+  background: var(--panel-raised);
+}
+
+.parts-table tbody tr[data-selected="true"] {
+  background: var(--accent-soft);
+}
+
+.parts-table tfoot th,
+.parts-table tfoot td {
+  height: 44px;
+  border-bottom: 0;
+  border-top: 1px solid var(--line-strong);
+  font-weight: 600;
+}
+
+.parts-pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 47px;
+  padding: 4px 10px;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+
+.parts-pick:focus-visible {
+  outline-offset: -2px;
+}
+
+.parts-name {
+  display: grid;
+  min-width: 0;
+  font-weight: 500;
+}
+
+.parts-category {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.parts-own {
+  display: block;
+  color: var(--accent);
+  font-size: 11px;
+}
+
 @media (max-width: 820px) {
   .app {
     /*
@@ -1412,8 +1634,25 @@ input {
     padding: 12px;
   }
 
-  .palette h2 {
-    padding: 0 2px 8px;
+  .palette-head {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: center;
+    gap: 12px;
+    padding: 0 0 8px;
+  }
+
+  .palette-search {
+    height: 38px;
+    /* 16px stops phone browsers zooming the page when the field is focused. */
+    font-size: 16px;
+  }
+
+  .palette-group + .palette-group {
+    margin-top: 10px;
+  }
+
+  .palette-group h3 {
+    padding: 0 2px 6px;
   }
 
   .palette ul {
@@ -1672,5 +1911,33 @@ input {
 
   .sidebar--inspector .field-control {
     justify-items: start;
+  }
+}
+
+@media (max-width: 820px) {
+  .parts-list-inner {
+    gap: 12px;
+    padding: 12px 12px 20px;
+  }
+
+  .parts-list-head {
+    align-items: center;
+  }
+
+  .parts-size {
+    display: none;
+  }
+
+  .parts-table th,
+  .parts-table td {
+    padding: 0 6px;
+  }
+
+  .parts-pick {
+    padding: 4px 6px;
+  }
+
+  .menu-item {
+    padding: 10px;
   }
 }

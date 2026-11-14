@@ -57,7 +57,9 @@ export function findIssues(
       box.min.z < -EPS;
     if (outside) issues.push({ partId: id, kind: "outOfBounds", withIds: [] });
 
-    if (box.max.z > minInteriorHeight(shell, box.min.x, box.max.x) + EPS) {
+    // Roof-mounted parts are on the outside, so the ceiling is not a limit for them.
+    const onRoof = def?.mount === "roof";
+    if (!onRoof && box.max.z > minInteriorHeight(shell, box.min.x, box.max.x) + EPS) {
       issues.push({ partId: id, kind: "tooTall", withIds: [] });
     }
   }

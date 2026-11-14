@@ -22,7 +22,8 @@ interface SideTransform {
   toModel: (sx: number, sy: number) => { x: number; z: number };
 }
 
-function useSideTransform(shell: VanShell) {
+/** `highest` is the top of the tallest thing to show, which a roof-mounted part can raise. */
+function useSideTransform(shell: VanShell, highest: number) {
   const ref = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState({ width: 0, height: 0 });
   useLayoutEffect(() => {
@@ -40,7 +41,7 @@ function useSideTransform(shell: VanShell) {
 
   const view = useMemo<SideTransform>(() => {
     const length = shell.cargoLength;
-    const top = Math.max(interiorHeightAt(shell, 0), interiorHeightAt(shell, length));
+    const top = Math.max(interiorHeightAt(shell, 0), interiorHeightAt(shell, length), highest);
     const scale = Math.max(
       0.01,
       Math.min((size.width - 2 * PADDING) / length, (size.height - 2 * PADDING) / top),
@@ -53,7 +54,7 @@ function useSideTransform(shell: VanShell) {
       toScreen: (x, z) => ({ x: left + x * scale, y: floor - z * scale }),
       toModel: (sx, sy) => ({ x: (sx - left) / scale, z: (floor - sy) / scale }),
     };
-  }, [shell, size]);
+  }, [shell, size, highest]);
   return { ref, view };
 }
 
@@ -74,7 +75,6 @@ export function SideView() {
   const selectedId = useUiStore((state) => state.selectedId);
   const dragging = useUiStore((state) => state.drag !== null);
   const issues = useIssues();
-  const { ref, view } = useSideTransform(shell);
   const svgRef = useRef<SVGSVGElement>(null);
 
   // Passenger side first, so parts nearer the viewer (the driver side) are drawn on top.
@@ -85,6 +85,9 @@ export function SideView() {
       ),
     [doc.parts],
   );
+  // Whole centimetres, so the view does not rescale on every frame of a drag.
+  const highest = Math.ceil(Math.max(0, ...parts.map((part) => partBox(part).max.z)) / 10) * 10;
+  const { ref, view } = useSideTransform(shell, highest);
   const selected = parts.find((part) => part.id === selectedId) ?? null;
   const ready = view.width > 0 && view.height > 0;
 

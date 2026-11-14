@@ -2,6 +2,7 @@ import { getPartDefinition, shells } from "@vanbuild/catalog";
 import {
   ESTIMATED,
   effectiveChassis,
+  fillLevelOf,
   GRAMS_PER_POUND,
   type LimitCheck,
   type LimitStatus,
@@ -97,7 +98,7 @@ export function WeightPanel() {
     return def?.mass.contents ? [{ part, def }] : [];
   });
   const seats = shell.cabSeats.length;
-  const { occupants, occupantMass, fillLevels } = doc.loadCase;
+  const { occupants, occupantMass } = doc.loadCase;
 
   return (
     <section className="weight" aria-label="Weight" data-testid="weight-panel">
@@ -159,7 +160,7 @@ export function WeightPanel() {
           onCommit={setOccupantMass}
         />
         {tanks.map(({ part, def }) => {
-          const fill = fillLevels[part.id] ?? 1;
+          const fill = fillLevelOf(doc, def, part.id);
           const inputId = `fill-${part.id}`;
           return (
             <div className="field field--slider" key={part.id}>

@@ -4,7 +4,7 @@ import { promaster136HighRoof, promaster159HighRoof } from "./shells/promaster";
 import { sprinter144HighRoof, sprinter170HighRoof } from "./shells/sprinter";
 import { transit148HighRoof, transit148MediumRoof } from "./shells/transit";
 
-export { partDefinitions } from "./parts/definitions";
+export { categoryLabels, partDefinitions } from "./parts/definitions";
 export { starterDesign } from "./starter";
 
 export const shells: VanShell[] = [

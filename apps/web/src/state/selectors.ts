@@ -2,6 +2,7 @@ import { getPartDefinition, getShell } from "@vanbuild/catalog";
 import {
   type DesignDoc,
   designWeight,
+  fillLevelOf,
   findIssues,
   type PartInstance,
   type PartIssue,
@@ -75,18 +76,17 @@ export interface LayoutTotals {
 }
 
 export function useTotals(): LayoutTotals {
-  const parts = useDocStore((state) => state.doc.parts);
-  const fillLevels = useDocStore((state) => state.doc.loadCase.fillLevels);
+  const doc = useDocStore((state) => state.doc);
   return useMemo(() => {
     const totals: LayoutTotals = { count: 0, mass: 0, price: 0, currency: "USD" };
-    for (const part of Object.values(parts)) {
+    for (const part of Object.values(doc.parts)) {
       const def = getPartDefinition(part.defId);
       if (!def) continue;
       totals.count += 1;
-      totals.mass += partMass(def, part, fillLevels[part.id] ?? 1);
+      totals.mass += partMass(def, part, fillLevelOf(doc, def, part.id));
       totals.price += partPrice(def, part);
       totals.currency = def.price.currency;
     }
     return totals;
-  }, [parts, fillLevels]);
+  }, [doc]);
 }

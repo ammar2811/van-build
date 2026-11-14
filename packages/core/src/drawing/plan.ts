@@ -10,24 +10,12 @@ import type { DesignDoc } from "../schema/design";
 import type { PartInstance } from "../schema/part";
 import type { VanShell } from "../schema/shell";
 import { maxHalfWidth, outlineAt } from "../shell/geometry";
-import { formatLength, formatSize, type UnitSystem } from "../units/length";
+import { formatLength, formatSize } from "../units/length";
 import { type DrawItem, type Drawing, dimension, FAINT, INK, THIN } from "./ir";
+import { type SheetOptions, sheetArea, textWidth, titleBlock, unitNote } from "./sheet";
 
-export interface PlanOptions {
-  units: UnitSystem;
-  /** Defaults to A4 for metric and US Letter for imperial. */
-  paper?: "a4" | "letter";
-  /** Printed in the title block. Passed in so the output stays deterministic. */
-  date?: string;
-}
+export type PlanOptions = SheetOptions;
 
-const PAPER = {
-  a4: { width: 297, height: 210 },
-  letter: { width: 279.4, height: 215.9 },
-} as const;
-
-const MARGIN = 10;
-const TITLE_HEIGHT = 14;
 const SCALES = [10, 15, 20, 25, 30, 40, 50] as const;
 const ROW_HEIGHT = 4.4;
 const SCHEDULE_COLUMNS = 2;
@@ -35,11 +23,6 @@ const SCHEDULE_GAP = 8;
 /** Share of the table width per column: #, part, size, front, driver, off floor. */
 const COLUMN_SHARE = [0.07, 0.3, 0.33, 0.11, 0.11, 0.08] as const;
 const COLUMN_TITLES = ["#", "Part", "W x D x H", "Front", "Driver", "Up"] as const;
-
-/** Helvetica averages about half an em per character. Good enough to decide if a label fits. */
-function textWidth(text: string, size: number): number {
-  return text.length * size * 0.52;
-}
 
 /** Parts in reading order (front to rear, then driver side to passenger side). */
 export function partsInDrawingOrder(doc: DesignDoc): PartInstance[] {
@@ -61,16 +44,10 @@ export function planDrawing(
   options: PlanOptions,
 ): Drawing {
   const units = options.units;
-  const page = PAPER[options.paper ?? (units === "metric" ? "a4" : "letter")];
-  const items: DrawItem[] = [];
   const parts = partsInDrawingOrder(doc);
-
-  const left = MARGIN;
-  const right = page.width - MARGIN;
-  const top = MARGIN;
-  const bottom = page.height - MARGIN - TITLE_HEIGHT;
-
   const halfWidth = maxHalfWidth(shell);
+  const area = sheetArea(options);
+  const { page, left, right, top, bottom } = area;
   const planLeft = left + 16;
   const planTop = top + 9;
 
@@ -91,60 +68,17 @@ export function planDrawing(
   // Passenger side (+Y) is drawn at the top, so the view is a true top-down view, not mirrored.
   const py = (y: number) => planTop + (halfWidth - y) / scale;
 
-  // Sheet border and title block.
-  items.push({
-    type: "rect",
-    x: left,
-    y: top,
-    w: right - left,
-    h: page.height - 2 * MARGIN,
-    stroke: INK,
-  });
-  items.push({ type: "line", x1: left, y1: bottom, x2: right, y2: bottom, stroke: INK });
-  items.push({
-    type: "text",
-    x: left + 4,
-    y: bottom + 6,
-    text: doc.name,
-    size: 4,
-    anchor: "start",
-    bold: true,
-  });
-  items.push({
-    type: "text",
-    x: left + 4,
-    y: bottom + 11,
-    text: `${shell.name} - floor plan`,
-    size: 2.6,
-    anchor: "start",
-  });
-  items.push({
-    type: "text",
-    x: (left + right) / 2,
-    y: bottom + 8.5,
-    text: "Planning estimate. Measure your own van before cutting.",
-    size: 2.4,
-    anchor: "middle",
-    gray: 0.35,
-  });
-  items.push({
-    type: "text",
-    x: right - 4,
-    y: bottom + 6,
-    text: `Scale 1:${scale}`,
-    size: 2.8,
-    anchor: "end",
-    bold: true,
-  });
-  const unitNote = units === "metric" ? "Dimensions in mm" : "Dimensions in inches";
-  items.push({
-    type: "text",
-    x: right - 4,
-    y: bottom + 11,
-    text: options.date ? `${unitNote} - ${options.date}` : unitNote,
-    size: 2.4,
-    anchor: "end",
-  });
+  const items: DrawItem[] = titleBlock(
+    area,
+    {
+      name: doc.name,
+      subtitle: `${shell.name} - floor plan`,
+      caution: "Planning estimate. Measure your own van before cutting.",
+      headline: `Scale 1:${scale}`,
+      note: unitNote(units),
+    },
+    options,
+  );
 
   // Van interior at floor level.
   items.push({
@@ -222,6 +156,15 @@ export function planDrawing(
         (corner) => Math.abs(corner.x - x) < 1 && Math.abs(corner.y - y) < 1,
       ).length;
       cornerLabels.push({ x, y });
+      // A white tag behind the label keeps it readable over whatever is drawn underneath.
+      items.push({
+        type: "rect",
+        x: x + 0.8,
+        y: y + 0.9 + sameCorner * 3.6,
+        w: textWidth(label, 2.6) * 0.95 + 1.4,
+        h: 3.5,
+        fill: 1,
+      });
       items.push({
         type: "text",
         x: x + 1.5,

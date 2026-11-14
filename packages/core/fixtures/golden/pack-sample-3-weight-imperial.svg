@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="279.4mm" height="215.9mm" viewBox="0 0 279.4 215.9" font-family="Helvetica, Arial, sans-serif" stroke-linecap="round" stroke-linejoin="round">
+<title>Test layout - weight estimate</title>
+<rect width="279.4" height="215.9" fill="rgb(255,255,255)"/>
+<rect x="10" y="10" width="259.4" height="195.9" fill="none" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="10" y1="191.9" x2="269.4" y2="191.9" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="14" y="197.9" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Test layout</text>
+<text x="14" y="202.9" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">Test Van - weight estimate</text>
+<text x="139.7" y="200.4" font-size="2.4" text-anchor="middle" fill="rgb(89,89,89)">An estimate, not a measurement. Weigh the finished van on a scale.</text>
+<text x="265.4" y="197.9" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Gross 6105 lb</text>
+<text x="265.4" y="202.9" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">Weights in lb - 2026-11-13 - sheet 3 of 4</text>
+<text x="14" y="18" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Weight estimate</text>
+<text x="66" y="26.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Load</text>
+<text x="90" y="26.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Rating</text>
+<text x="104" y="26.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Used</text>
+<line x1="14" y1="27.4" x2="176" y2="27.4" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="14" y="32.1" font-size="2.8" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Front axle</text>
+<text x="66" y="32.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">3398 lb</text>
+<text x="90" y="32.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">4409 lb</text>
+<text x="104" y="32.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">77%</text>
+<rect x="109" y="29.2" width="34.67" height="3.6" fill="rgb(179,179,179)" stroke="none"/>
+<rect x="109" y="29.2" width="45" height="3.6" fill="none" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="149.5" y1="28.4" x2="149.5" y2="33.6" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="158" y="32.1" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">OK</text>
+<line x1="14" y1="34.4" x2="176" y2="34.4" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="14" y="39.1" font-size="2.8" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Rear axle</text>
+<text x="66" y="39.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">2707 lb</text>
+<text x="90" y="39.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">5512 lb</text>
+<text x="104" y="39.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">49%</text>
+<rect x="109" y="36.2" width="22.1" height="3.6" fill="rgb(179,179,179)" stroke="none"/>
+<rect x="109" y="36.2" width="45" height="3.6" fill="none" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="149.5" y1="35.4" x2="149.5" y2="40.6" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="158" y="39.1" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">OK</text>
+<line x1="14" y1="41.4" x2="176" y2="41.4" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="14" y="46.1" font-size="2.8" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Gross weight</text>
+<text x="66" y="46.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">6105 lb</text>
+<text x="90" y="46.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">9050 lb</text>
+<text x="104" y="46.1" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)">67%</text>
+<rect x="109" y="43.2" width="30.35" height="3.6" fill="rgb(179,179,179)" stroke="none"/>
+<rect x="109" y="43.2" width="45" height="3.6" fill="none" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="149.5" y1="42.4" x2="149.5" y2="47.6" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="158" y="46.1" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">OK</text>
+<line x1="14" y1="48.4" x2="176" y2="48.4" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="14" y="54.9" font-size="2.8" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Payload remaining: 2945 lb of 3538 lb.</text>
+<text x="14" y="60.4" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">Centre of gravity: 64&quot; behind the front axle (44% of the wheelbase), 5/16&quot; toward the driver side.</text>
+<text x="14" y="65.9" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">On board: 2 people at 176 lb each, Water tank 50% full.</text>
+<text x="185.4" y="26.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Vehicle</text>
+<line x1="185.4" y1="27.4" x2="265.4" y2="27.4" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="185.4" y="30.8" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Test Van</text>
+<text x="185.4" y="35.4" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Base</text>
+<text x="185.4" y="40" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Wheelbase</text>
+<text x="240.4" y="40" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">144 5/16&quot;</text>
+<text x="185.4" y="44.6" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Gross rating (GVWR)</text>
+<text x="240.4" y="44.6" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">9050 lb</text>
+<text x="243.4" y="44.6" font-size="2.2" text-anchor="start" fill="rgb(89,89,89)">published</text>
+<text x="185.4" y="49.2" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Front axle rating</text>
+<text x="240.4" y="49.2" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">4409 lb</text>
+<text x="243.4" y="49.2" font-size="2.2" text-anchor="start" fill="rgb(89,89,89)">published</text>
+<text x="185.4" y="53.8" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Rear axle rating</text>
+<text x="240.4" y="53.8" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">5512 lb</text>
+<text x="243.4" y="53.8" font-size="2.2" text-anchor="start" fill="rgb(89,89,89)">your number</text>
+<text x="185.4" y="58.4" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Empty, front axle</text>
+<text x="240.4" y="58.4" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">3086 lb</text>
+<text x="243.4" y="58.4" font-size="2.2" text-anchor="start" fill="rgb(89,89,89)">published</text>
+<text x="185.4" y="63" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)">Empty, rear axle</text>
+<text x="240.4" y="63" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">2425 lb</text>
+<text x="243.4" y="63" font-size="2.2" text-anchor="start" fill="rgb(89,89,89)">published</text>
+<text x="15" y="80.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Item</text>
+<text x="79.94" y="80.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Weight</text>
+<text x="100.62" y="80.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Behind front axle</text>
+<text x="117.66" y="80.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">On front</text>
+<text x="134.7" y="80.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">On rear</text>
+<line x1="14" y1="81.4" x2="135.7" y2="81.4" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="15" y="84.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Empty van</text>
+<text x="79.94" y="84.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">5512 lb</text>
+<text x="117.66" y="84.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">3086 lb</text>
+<text x="134.7" y="84.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">2425 lb</text>
+<line x1="14" y1="85.8" x2="135.7" y2="85.8" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="88.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Driver</text>
+<text x="79.94" y="88.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">176 lb</text>
+<text x="100.62" y="88.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">35 7/16&quot;</text>
+<text x="117.66" y="88.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">133 lb</text>
+<text x="134.7" y="88.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">43 lb</text>
+<line x1="14" y1="90.2" x2="135.7" y2="90.2" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="93.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Passenger</text>
+<text x="79.94" y="93.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">176 lb</text>
+<text x="100.62" y="93.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">35 7/16&quot;</text>
+<text x="117.66" y="93.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">133 lb</text>
+<text x="134.7" y="93.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">43 lb</text>
+<line x1="14" y1="94.6" x2="135.7" y2="94.6" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="97.7" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Crate</text>
+<text x="79.94" y="97.7" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">22 lb</text>
+<text x="100.62" y="97.7" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">61&quot;</text>
+<text x="117.66" y="97.7" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">13 lb</text>
+<text x="134.7" y="97.7" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">9 lb</text>
+<line x1="14" y1="99" x2="135.7" y2="99" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="102.1" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Cabinet</text>
+<text x="79.94" y="102.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">88 lb</text>
+<text x="100.62" y="102.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">90 9/16&quot;</text>
+<text x="117.66" y="102.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">33 lb</text>
+<text x="134.7" y="102.1" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">55 lb</text>
+<line x1="14" y1="103.4" x2="135.7" y2="103.4" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="106.5" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Overhead shelf</text>
+<text x="79.94" y="106.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">18 lb</text>
+<text x="100.62" y="106.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">90 9/16&quot;</text>
+<text x="117.66" y="106.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">7 lb</text>
+<text x="134.7" y="106.5" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">11 lb</text>
+<line x1="14" y1="107.8" x2="135.7" y2="107.8" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="110.9" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)">Water tank</text>
+<text x="79.94" y="110.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">112 lb</text>
+<text x="100.62" y="110.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">153 9/16&quot;</text>
+<text x="117.66" y="110.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">-7 lb</text>
+<text x="134.7" y="110.9" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)">120 lb</text>
+<line x1="14" y1="112.2" x2="135.7" y2="112.2" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="15" y="115.3" font-size="2.2" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Total</text>
+<text x="79.94" y="115.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">6105 lb</text>
+<text x="100.62" y="115.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">64&quot;</text>
+<text x="117.66" y="115.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">3398 lb</text>
+<text x="134.7" y="115.3" font-size="2.2" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">2707 lb</text>
+<line x1="14" y1="116.6" x2="135.7" y2="116.6" stroke="rgb(140,140,140)" stroke-width="0.18"/>
+<text x="265.4" y="189.9" font-size="2" text-anchor="end" fill="rgb(89,89,89)">Each load is a point mass at the centre of its box, on level ground. A load behind the rear axle takes weight off the front axle.</text>
+</svg>

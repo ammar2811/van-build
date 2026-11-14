@@ -156,3 +156,23 @@ export function obstaclesFor(
     return !other || !mayOverlap(def, definitions(other.defId));
   });
 }
+
+/** Roof-mounted parts sit on the outside, this far above the interior ceiling. */
+export const ROOF_THICKNESS = 60;
+
+/** Height of the underside a new instance of a definition starts at in a given van. */
+export function initialElevation(shell: VanShell, def: PartDefinition): number {
+  if (def.mount === "roof") {
+    const top = Math.max(...shell.stations.flatMap((s) => s.profile.map((p) => p.z)));
+    return top + ROOF_THICKNESS;
+  }
+  return def.defaultElevation ?? 0;
+}
+
+/**
+ * How full a tank is for the weight estimate: what the design says, or the usual travelling
+ * state when it says nothing (fresh water full, grey water empty).
+ */
+export function fillLevelOf(doc: DesignDoc, def: PartDefinition, partId: string): number {
+  return doc.loadCase.fillLevels[partId] ?? (def.water?.kind === "grey" ? 0 : 1);
+}

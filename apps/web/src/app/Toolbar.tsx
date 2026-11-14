@@ -1,12 +1,13 @@
 import type { UnitSystem } from "@vanbuild/core";
 import { useRef, useState } from "react";
-import { exportPdf } from "../export/exportPdf";
+import { EXPORTS, type ExportKind, exportDesign } from "../export/exports";
 import type { SaveStatus } from "../persistence/autosave";
 import { renameDesign } from "../state/actions";
 import { useDocStore } from "../state/docStore";
 import { useShell } from "../state/selectors";
 import { useUiStore } from "../state/uiStore";
 import { DownloadIcon, RedoIcon, UndoIcon } from "../ui/icons";
+import { MenuButton } from "../ui/MenuButton";
 
 const UNIT_OPTIONS: { value: UnitSystem; label: string; name: string }[] = [
   { value: "metric", label: "mm", name: "Millimetres" },
@@ -80,14 +81,14 @@ export function Toolbar() {
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
 
-  const onExport = async () => {
+  const onExport = async (kind: ExportKind) => {
     setExporting(true);
     setExportError(null);
     try {
-      await exportPdf(useDocStore.getState().doc, units);
+      await exportDesign(kind, useDocStore.getState().doc, units);
     } catch (error) {
       console.error(error);
-      setExportError("Could not create the PDF. Please try again.");
+      setExportError("Could not create the file. Please try again.");
     } finally {
       setExporting(false);
     }
@@ -106,7 +107,7 @@ export function Toolbar() {
           role="status"
           title={
             saveStatus === "failed"
-              ? "This browser is not letting the design be saved. Export a PDF to keep a copy."
+              ? "This browser is not letting the design be saved. Export the build pack to keep a copy."
               : undefined
           }
         >
@@ -162,17 +163,20 @@ export function Toolbar() {
           ))}
         </fieldset>
 
-        <button
-          type="button"
+        <MenuButton
+          label={exporting ? "Exporting" : "Export"}
+          icon={<DownloadIcon />}
           className="button button--primary"
-          data-testid="export-pdf"
-          aria-label="Export PDF"
+          testId="export-menu"
           disabled={exporting}
-          onClick={onExport}
-        >
-          <DownloadIcon />
-          <span className="button-label">{exporting ? "Exporting" : "Export PDF"}</span>
-        </button>
+          items={EXPORTS.map((item) => ({
+            id: item.kind,
+            label: item.label,
+            detail: item.detail,
+            testId: `export-${item.kind}`,
+          }))}
+          onSelect={(kind) => onExport(kind as ExportKind)}
+        />
       </div>
     </header>
   );

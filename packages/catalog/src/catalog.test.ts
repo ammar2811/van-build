@@ -5,13 +5,21 @@ import {
   findIssues,
   interiorHeightAt,
   PartDefinitionSchema,
+  placeNewPart,
   requiredProvenanceKeys,
   ridersOf,
   VanShellSchema,
   wallDistances,
 } from "@vanbuild/core";
 import { describe, expect, it } from "vitest";
-import { getPartDefinition, getShell, partDefinitions, shells, starterDesign } from "./index";
+import {
+  categoryLabels,
+  getPartDefinition,
+  getShell,
+  partDefinitions,
+  shells,
+  starterDesign,
+} from "./index";
 
 describe("van shells", () => {
   it("have unique ids", () => {
@@ -187,14 +195,34 @@ describe("part definitions", () => {
         expect(param.default).toBeLessThanOrEqual(param.max);
       }
       expect(def.mass.fixed).toBeGreaterThan(0);
-      expect(def.price.fixed).toBeGreaterThan(0);
+      // Loads are things you already own: they weigh something but cost nothing.
+      if (def.category !== "load") expect(def.price.fixed).toBeGreaterThan(0);
     });
   }
 });
 
 describe("catalog size", () => {
-  it("offers at least ten parts", () => {
-    expect(partDefinitions.length).toBeGreaterThanOrEqual(10);
+  it("offers about forty parts across every category", () => {
+    expect(partDefinitions.length).toBeGreaterThanOrEqual(40);
+    const used = new Set(partDefinitions.map((def) => def.category));
+    expect([...used].sort()).toEqual(Object.keys(categoryLabels).sort());
+  });
+
+  it("gives every part that holds water a matching capacity", () => {
+    for (const def of partDefinitions.filter((d) => d.water)) {
+      expect(def.mass.contents?.capacityLitres, def.id).toBe(def.water?.litres);
+    }
+  });
+
+  it("can place every part in every van without a problem", () => {
+    for (const shell of shells) {
+      const base = { ...starterDesign(), shellId: shell.id, parts: {} };
+      for (const def of partDefinitions) {
+        const placed = placeNewPart(base, shell, def, "new");
+        const issues = findIssues({ ...base, parts: { new: placed } }, shell, getPartDefinition);
+        expect(issues, `${def.id} in ${shell.id}`).toEqual([]);
+      }
+    }
   });
 });
 

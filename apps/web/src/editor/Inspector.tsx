@@ -1,5 +1,6 @@
 import { getPartDefinition } from "@vanbuild/catalog";
 import {
+  fillLevelOf,
   formatMass,
   formatMoney,
   type PartIssue,
@@ -20,6 +21,7 @@ import {
   setDistance,
   setElevation,
   setPartMass,
+  setPartPrice,
   toggleLock,
 } from "../state/actions";
 import { useDocStore } from "../state/docStore";
@@ -28,6 +30,7 @@ import { useUiStore } from "../state/uiStore";
 import { CheckIcon, CopyIcon, LockIcon, RotateIcon, TrashIcon, UnlockIcon } from "../ui/icons";
 import { LengthField } from "./LengthField";
 import { MassField } from "./MassField";
+import { MoneyField } from "./MoneyField";
 
 /** Look up display names for the things an issue refers to. */
 function useNameOf(): (id: string) => string {
@@ -52,7 +55,7 @@ export function Inspector() {
   const units = useUiStore((state) => state.units);
   const issues = useIssues();
   const nameOf = useNameOf();
-  const fillLevels = useDocStore((state) => state.doc.loadCase.fillLevels);
+  const doc = useDocStore((state) => state.doc);
 
   if (!part) return <LayoutSummary />;
   const def = getPartDefinition(part.defId);
@@ -66,7 +69,7 @@ export function Inspector() {
     return param?.kind === "length" ? { min: param.min, max: param.max } : {};
   };
   const partIssues = issues.get(part.id) ?? [];
-  const fill = fillLevels[part.id] ?? 1;
+  const fill = fillLevelOf(doc, def, part.id);
 
   return (
     // Keyed by part so a half-typed value never carries over to another part.
@@ -151,7 +154,7 @@ export function Inspector() {
         />
       </div>
 
-      <h3>Weight</h3>
+      <h3>Weight and price</h3>
       <div className="field-grid field-grid--weight">
         <MassField
           label={def.mass.contents ? "Empty weight" : "Weight"}
@@ -161,6 +164,17 @@ export function Inspector() {
           disabled={locked}
           onReset={part.overrides.mass === undefined ? undefined : () => setPartMass(part.id, null)}
           onCommit={(grams) => setPartMass(part.id, grams === def.mass.fixed ? null : grams)}
+        />
+        <MoneyField
+          label="Price"
+          testId="field-price"
+          value={part.overrides.price ?? def.price.fixed}
+          currency={def.price.currency}
+          disabled={locked}
+          onReset={
+            part.overrides.price === undefined ? undefined : () => setPartPrice(part.id, null)
+          }
+          onCommit={(minor) => setPartPrice(part.id, minor === def.price.fixed ? null : minor)}
         />
       </div>
 

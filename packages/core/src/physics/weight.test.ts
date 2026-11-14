@@ -239,6 +239,20 @@ describe("design weight", () => {
     expect(mass(0)).toBe(6_000);
   });
 
+  it("treats grey water as empty until told otherwise", () => {
+    const grey = {
+      ...(lookupTestDefinition("tank") as NonNullable<ReturnType<typeof lookupTestDefinition>>),
+      id: "grey",
+      water: { litres: 90, kind: "grey" as const },
+    };
+    const lookup = (id: string) => (id === "grey" ? grey : lookupTestDefinition(id));
+    const part = { ...testPart("g", "tank", 1500, 0), defId: "grey" };
+    const doc = testDesign([part]);
+    expect(designLoads(doc, testShell, lookup)[0]?.mass).toBe(6_000);
+    const full = { ...doc, loadCase: { ...doc.loadCase, fillLevels: { g: 1 } } };
+    expect(designLoads(full, testShell, lookup)[0]?.mass).toBe(96_000);
+  });
+
   it("seats people in the cab, driver first, and never more than there are seats", () => {
     const doc = testDesign([]);
     const withPeople = (occupants: number) =>

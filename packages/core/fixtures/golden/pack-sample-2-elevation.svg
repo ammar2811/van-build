@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="297mm" height="210mm" viewBox="0 0 297 210" font-family="Helvetica, Arial, sans-serif" stroke-linecap="round" stroke-linejoin="round">
+<title>Test layout - side elevation</title>
+<rect width="297" height="210" fill="rgb(255,255,255)"/>
+<rect x="10" y="10" width="277" height="190" fill="none" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="10" y1="186" x2="287" y2="186" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="14" y="192" font-size="4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">Test layout</text>
+<text x="14" y="197" font-size="2.6" text-anchor="start" fill="rgb(0,0,0)">Test Van - side elevation from the driver side</text>
+<text x="148.5" y="194.5" font-size="2.4" text-anchor="middle" fill="rgb(89,89,89)">Planning estimate. Measure your own van before cutting.</text>
+<text x="283" y="192" font-size="2.8" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">Scale 1:15</text>
+<text x="283" y="197" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)">Dimensions in mm - 2026-11-13 - sheet 2 of 4</text>
+<polygon points="26,145.67 26,19 226,19 226,145.67" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" stroke-width="0.6"/>
+<rect x="146" y="125.67" width="53.33" height="20" fill="rgb(204,204,204)" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<text x="172.67" y="136.27" font-size="1.8" text-anchor="middle" fill="rgb(77,77,77)">wheel well</text>
+<rect x="26" y="112.33" width="33.33" height="33.33" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="42.67" y="128.4" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">1</text>
+<text x="42.67" y="131.8" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Crate</text>
+<rect x="186" y="125.67" width="26.67" height="20" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="199.33" y="135.07" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">4</text>
+<text x="199.33" y="138.47" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Water tank</text>
+<rect x="59.33" y="29" width="66.67" height="23.33" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="92.67" y="40.07" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">3</text>
+<text x="92.67" y="43.47" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Overhead shelf</text>
+<rect x="52.67" y="85.67" width="80" height="60" fill="rgb(237,237,237)" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="92.67" y="115.07" font-size="3.2" text-anchor="middle" fill="rgb(0,0,0)" font-weight="bold">2</text>
+<text x="92.67" y="118.47" font-size="2.2" text-anchor="middle" fill="rgb(0,0,0)">Cabinet</text>
+<line x1="183.67" y1="145.67" x2="183.67" y2="148.17" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="183.67" y="151.07" font-size="2" text-anchor="middle" fill="rgb(77,77,77)">rear axle</text>
+<line x1="26" y1="145.67" x2="26" y2="157.87" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="226" y1="145.67" x2="226" y2="157.87" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="26" y1="156.67" x2="226" y2="156.67" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="25.1" y1="157.57" x2="26.9" y2="155.77" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="225.1" y1="157.57" x2="226.9" y2="155.77" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="126" y="155.67" font-size="2.4" text-anchor="middle" fill="rgb(0,0,0)">3000 mm</text>
+<line x1="26" y1="19" x2="16.8" y2="19" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="26" y1="145.67" x2="16.8" y2="145.67" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="18" y1="19" x2="18" y2="145.67" stroke="rgb(0,0,0)" stroke-width="0.18"/>
+<line x1="17.1" y1="19.9" x2="18.9" y2="18.1" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<line x1="17.1" y1="146.57" x2="18.9" y2="144.77" stroke="rgb(0,0,0)" stroke-width="0.35"/>
+<text x="17" y="82.33" font-size="2.4" text-anchor="middle" fill="rgb(0,0,0)" transform="rotate(-90 17 82.33)">1900 mm</text>
+<text x="26" y="162.67" font-size="2.4" text-anchor="start" fill="rgb(0,0,0)" font-weight="bold">FRONT (cab)</text>
+<text x="226" y="162.67" font-size="2.4" text-anchor="end" fill="rgb(0,0,0)" font-weight="bold">REAR (doors)</text>
+<text x="283" y="184" font-size="2" text-anchor="end" fill="rgb(89,89,89)">Part numbers match the floor plan, which lists every part's size and height off the floor.</text>
+</svg>

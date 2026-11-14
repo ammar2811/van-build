@@ -241,6 +241,19 @@ export function setPartMass(id: string, grams: number | null): void {
   });
 }
 
+/** Override a part's price (minor units), or pass null to go back to the catalog value. */
+export function setPartPrice(id: string, minor: number | null): void {
+  const { doc, commit } = current();
+  const part = doc.parts[id];
+  if (!part || isLocked(part)) return;
+  commit(`Set price of ${label(part)}`, (draft) => {
+    const target = draft.parts[id];
+    if (!target) return;
+    if (minor === null) delete target.overrides.price;
+    else target.overrides.price = minor;
+  });
+}
+
 export function setOccupants(count: number): void {
   const { shell, commit } = current();
   const occupants = Math.min(Math.max(Math.round(count), 0), shell.cabSeats.length);
@@ -259,8 +272,7 @@ export function setOccupantMass(grams: number): void {
 export function setFillLevel(partId: string, level: number): void {
   const fill = Math.min(Math.max(level, 0), 1);
   current().commit("Change fill level", (draft) => {
-    if (fill === 1) delete draft.loadCase.fillLevels[partId];
-    else draft.loadCase.fillLevels[partId] = fill;
+    draft.loadCase.fillLevels[partId] = fill;
   });
 }
 

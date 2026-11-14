@@ -3,8 +3,8 @@
 An open-source camper van layout planner. Placement that snaps into place, exact dimensions,
 and numbers you can build from.
 
-Status: early. Milestones M0 to M3 are done: foundations, the 2D editor, the weight model and
-the 3D view. See [Roadmap](#roadmap).
+Status: early. Milestones M0 to M4 are done: foundations, the 2D editor, the weight model, the
+3D view, and the full catalog with the parts list and build pack. See [Roadmap](#roadmap).
 
 ## What works today
 
@@ -17,8 +17,10 @@ the 3D view. See [Roadmap](#roadmap).
 - People in the cab, tank fill levels, per-part weights, and your own door-sticker and
   scale-ticket numbers in place of the catalog's.
 - Components can sit inside furniture: a tank in the galley, a battery under a bench.
-- Twelve parts to place: bed platform, mattress, galley, cooktop, cabinets, fridge, bench,
-  toilet, crate, water tank and battery.
+- 45 parts in ten groups, with search: beds, galley, seating, storage, appliances, water,
+  electrical, climate, windows and loads. Solar panels, fans and air conditioners go on the roof.
+- A parts list with costs: identical parts are counted together, and a price you type on a
+  part replaces the catalog's rough guide.
 - Drag parts with mouse or finger. They snap to walls, to each other and to a grid, and they
   cannot be pushed through one another.
 - Walls that lean in are modelled: an overhead cabinet stops where the wall is at its height,
@@ -29,7 +31,8 @@ the 3D view. See [Roadmap](#roadmap).
 - Zoom with the wheel or a pinch; the snapping grid gets finer as you zoom in.
 - Rotate in 90 degree steps, duplicate, lock, undo and redo, keyboard nudging.
 - Your layout is saved in the browser as you work and is still there after a reload.
-- Export a dimensioned floor plan as a vector PDF.
+- Export a build pack as a vector PDF (dimensioned floor plan, side elevation, weight estimate
+  and parts list), the floor plan as SVG, and the parts list as CSV.
 
 ## Getting started
 
@@ -70,15 +73,16 @@ pnpm e2e
 
 ```
 packages/core      Pure TypeScript engine: units, schemas, shell geometry, snapping,
-                   weight model, drawings. No DOM, no React.
+                   weight model, bill of materials, drawings. No DOM, no React.
 packages/catalog   Data only: van shells and part definitions, with sources.
 apps/web           The editor (React + Vite, react-three-fiber for 3D). Renders what the
                    engine computes. The 3D code is only downloaded when a 3D view is opened.
 docs               The maths and where the data comes from.
 ```
 
-The design document is the single source of truth. Weights, drawings and warnings are derived
-from it by pure functions and never stored. Lengths are millimetres everywhere in the model;
+The design document is the single source of truth. Weights, the parts list, drawings and
+warnings are derived from it by pure functions and never stored. Every export page is one
+drawing description that both the SVG and the PDF writer render, so they cannot disagree. Lengths are millimetres everywhere in the model;
 inches exist only at the edge of the UI.
 
 - [Weight and axle-load model](docs/physics.md)
@@ -92,7 +96,7 @@ inches exist only at the edge of the UI.
 | M1 (done) | Full 2D editor: more parts, locks, stacking, saved locally    |
 | M2 (done) | Live weight and axle-load panel, all six van shells           |
 | M3 (done) | 3D view in sync with the plan, side elevation                 |
-| M4        | Full part catalog, bill of materials, complete build pack PDF |
+| M4 (done) | Full part catalog, bill of materials, complete build pack PDF |
 | M5        | Accounts, cloud save, share links                             |
 | M6        | Launch hardening                                              |
 
