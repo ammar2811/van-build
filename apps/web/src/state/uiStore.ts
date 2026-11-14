@@ -5,6 +5,16 @@ import type { SyncStatus } from "../cloud/sync";
 import type { SaveStatus } from "../persistence/autosave";
 
 const UNITS_KEY = "vanbuild.units";
+/** Set once someone has seen the welcome, so it never comes back on this browser. */
+export const WELCOMED_KEY = "vanbuild.welcomed";
+
+export function hasBeenWelcomed(): boolean {
+  try {
+    return globalThis.localStorage?.getItem(WELCOMED_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
 
 function loadUnits(): UnitSystem {
   try {
@@ -45,6 +55,8 @@ interface UiState {
   cloudAvailable: boolean;
   account: CloudUser | null;
   syncStatus: SyncStatus;
+  /** First visit: offer the template picker before anything else. */
+  welcome: boolean;
   select: (id: string | null) => void;
   setUnits: (units: UnitSystem) => void;
   setDrag: (drag: DragState | null) => void;
@@ -53,6 +65,7 @@ interface UiState {
   setNotice: (notice: string | null) => void;
   setCloud: (cloud: Partial<Pick<UiState, "cloudAvailable" | "account" | "syncStatus">>) => void;
   setMode: (mode: UiState["mode"]) => void;
+  setWelcome: (welcome: boolean) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -66,6 +79,7 @@ export const useUiStore = create<UiState>((set) => ({
   cloudAvailable: false,
   account: null,
   syncStatus: "signedOut",
+  welcome: false,
   select: (selectedId) => set({ selectedId }),
   setUnits: (units) => {
     try {
@@ -81,4 +95,14 @@ export const useUiStore = create<UiState>((set) => ({
   setNotice: (notice) => set({ notice }),
   setCloud: (cloud) => set(cloud),
   setMode: (mode) => set({ mode }),
+  setWelcome: (welcome) => {
+    if (!welcome) {
+      try {
+        globalThis.localStorage?.setItem(WELCOMED_KEY, "1");
+      } catch {
+        // Seeing the welcome again in a private window is harmless.
+      }
+    }
+    set({ welcome });
+  },
 }));

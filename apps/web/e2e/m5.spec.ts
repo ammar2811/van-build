@@ -41,13 +41,13 @@ async function openDevice(browser: Browser, testInfo: TestInfo, path = "/"): Pro
 }
 
 async function signIn(page: Page, email: string): Promise<void> {
-  await page.getByTestId("sign-in").click();
+  await page.getByTestId("main-menu").click();
+  await page.getByTestId("menu-sign-in").click();
   await page.getByTestId("sign-in-email").fill(email);
   await page.getByTestId("sign-in-send").click();
   await expect(page.getByTestId("sign-in-sent")).toContainText(email);
   await page.keyboard.press("Escape");
   await expect(page.getByTestId("sign-in-dialog")).toHaveCount(0);
-  await expect(page.getByTestId("account-menu")).toBeVisible();
   await expect(page.getByTestId("save-status")).toHaveText("Saved to your account");
 }
 
@@ -68,7 +68,7 @@ async function refocus(page: Page): Promise<void> {
 }
 
 async function menu(page: Page, item: string): Promise<void> {
-  await page.getByTestId("account-menu").click();
+  await page.getByTestId("main-menu").click();
   await page.getByTestId(`menu-${item}`).click();
 }
 
@@ -76,13 +76,16 @@ test("without an account nothing changes: the design is saved on the device", as
   browser,
 }, testInfo) => {
   const { page } = await openDevice(browser, testInfo);
-  await expect(page.getByTestId("sign-in")).toBeVisible();
   await expect(page.getByTestId("save-status")).toHaveText("Saved on this device");
+  await page.getByTestId("main-menu").click();
+  await expect(page.getByTestId("menu-sign-in")).toBeVisible();
+  await expect(page.getByTestId("menu-designs")).toHaveCount(0);
 });
 
 test("signing in rejects an address that is not an email", async ({ browser }, testInfo) => {
   const { page } = await openDevice(browser, testInfo);
-  await page.getByTestId("sign-in").click();
+  await page.getByTestId("main-menu").click();
+  await page.getByTestId("menu-sign-in").click();
   await page.getByTestId("sign-in-email").fill("van life");
   await page.getByTestId("sign-in-send").click();
   await expect(page.getByRole("alert")).toHaveText("Enter an email address like name@example.com");
@@ -216,7 +219,7 @@ test("a share link opens the layout read-only, and stops working when sharing st
   const page = visitor.page;
   await expect(page.getByTestId("design-name")).toHaveText("Shared Sprinter");
   await expect(page.getByTestId("save-status")).toHaveText("Shared layout, changes are not saved");
-  await expect(page.getByTestId("sign-in")).toHaveCount(0);
+  await expect(page.getByTestId("main-menu")).toHaveCount(0);
   await expect(page.getByTestId("part-galley")).toBeVisible();
 
   // Trying a change on the shared layout never reaches the owner's copy.
@@ -298,8 +301,10 @@ test("signing out keeps the layout on the device but stops syncing it", async ({
   await rename(page, "Mine");
   await signIn(page, "ann@example.com");
   await menu(page, "sign-out");
-  await expect(page.getByTestId("sign-in")).toBeVisible();
   await expect(page.getByTestId("save-status")).toHaveText("Saved on this device");
+  await page.getByTestId("main-menu").click();
+  await expect(page.getByTestId("menu-sign-in")).toBeVisible();
+  await page.keyboard.press("Escape");
   await rename(page, "Mine, signed out");
   await page.waitForTimeout(500);
   expect(cloud.store.designsOf("ann@example.com")[0]?.name).toBe("Mine");

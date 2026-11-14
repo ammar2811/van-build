@@ -1,7 +1,7 @@
 import { getPartDefinition, shells } from "@vanbuild/catalog";
 import { type DesignDoc, dropUnknownParts, loadDesign } from "@vanbuild/core";
 import { useDocStore } from "../state/docStore";
-import { useUiStore } from "../state/uiStore";
+import { hasBeenWelcomed, useUiStore } from "../state/uiStore";
 import { createAutosaver } from "./autosave";
 import type { DesignRepository } from "./repository";
 
@@ -29,6 +29,8 @@ export async function startPersistence(repository: DesignRepository): Promise<vo
   let storageWorks = true;
   try {
     const raw = await repository.load();
+    // Nothing saved yet: a first visit. Offer the templates over the example layout.
+    if (raw === null && !hasBeenWelcomed()) ui.setWelcome(true);
     if (raw !== null) {
       const opened = openSaved(raw);
       if (typeof opened === "string") {

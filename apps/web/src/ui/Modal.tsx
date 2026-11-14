@@ -21,7 +21,12 @@ export function Modal({ title, testId, onClose, children, footer }: ModalProps) 
 
   useEffect(() => {
     const dialog = ref.current;
-    if (dialog && !dialog.open) dialog.showModal();
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    // Start on the field marked for it, or on the dialog itself: never on the close button,
+    // where Enter would throw away what the dialog is for.
+    const first = dialog.querySelector<HTMLElement>("[data-autofocus]");
+    (first ?? dialog).focus();
   }, []);
 
   // Rendered at the end of the page, so styles of whatever opened it never leak in.
@@ -31,6 +36,7 @@ export function Modal({ title, testId, onClose, children, footer }: ModalProps) 
       className="modal"
       data-testid={testId}
       aria-labelledby={titleId}
+      tabIndex={-1}
       onClose={onClose}
       // Escape inside the dialog is for the dialog, not the editor's shortcuts behind it.
       onKeyDown={(event) => event.stopPropagation()}

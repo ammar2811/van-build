@@ -28,7 +28,6 @@ export function WeightStrip() {
         className="weight-strip"
         data-status={status}
         data-testid="weight-strip"
-        aria-label="Weight. Open details"
         onClick={() => setOpen(true)}
       >
         {rows.map(({ key, label, check }) => (
@@ -44,6 +43,7 @@ export function WeightStrip() {
             </span>
           </span>
         ))}
+        <span className="visually-hidden">Open weight details</span>
       </button>
       {open && (
         <dialog

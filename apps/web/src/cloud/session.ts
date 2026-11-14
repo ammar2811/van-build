@@ -112,7 +112,7 @@ export const cloud = {
   listDesigns: (): Promise<CloudDesignSummary[]> => requireBackend().listDesigns(),
   currentDesignId: (): string | null => engine?.currentLink?.designId ?? null,
   openDesign: (id: string) => requireEngine().openDesign(id),
-  newDesign: () => requireEngine().createDesign(blankDesign()),
+  newDesign: (doc: DesignDoc = blankDesign()) => requireEngine().createDesign(doc),
   deleteDesign: (design: CloudDesignSummary) =>
     requireEngine().deleteDesign(design.id, design.revision, blankDesign),
   listVersions: (): Promise<CloudVersion[]> => requireEngine().listVersions(),

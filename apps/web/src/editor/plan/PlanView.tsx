@@ -717,17 +717,37 @@ function PartShape({
       data-elevation={part.position.z}
     >
       <title>{`${name}, ${sizeLabel}`}</title>
-      <rect className="part-body" {...rect} rx={3} />
-      {showName && (
-        <text className="part-name" x={labelX} y={labelY} transform={labelTransform}>
-          {name}
-        </text>
-      )}
-      {showSize && (
-        <text className="part-size" x={labelX} y={labelY + 15} transform={labelTransform}>
-          {detail}
-        </text>
-      )}
+      {/* biome-ignore lint/a11y/useSemanticElements: an SVG shape cannot be a <button> */}
+      <rect
+        className="part-body"
+        {...rect}
+        rx={3}
+        // The shape is the control: Tab reaches it, Enter or Space selects the part, then the
+        // arrow keys nudge it. Its name starts with what is written on the part.
+        role="button"
+        tabIndex={0}
+        aria-pressed={selected}
+        aria-label={`${name} ${detail}${locked ? ", locked" : ""}${flagged ? ", needs attention" : ""}`}
+        onKeyDown={(event) => {
+          if (event.key !== "Enter" && event.key !== " ") return;
+          event.preventDefault();
+          useUiStore.getState().select(part.id);
+        }}
+      />
+      {/* The shape's name already says this; screen readers should not read it twice. */}
+      {/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: SVG groups and text never take focus */}
+      <g aria-hidden="true">
+        {showName && (
+          <text className="part-name" x={labelX} y={labelY} transform={labelTransform}>
+            {name}
+          </text>
+        )}
+        {showSize && (
+          <text className="part-size" x={labelX} y={labelY + 15} transform={labelTransform}>
+            {detail}
+          </text>
+        )}
+      </g>
       {locked && rect.width >= 26 && rect.height >= 26 && (
         <g className="part-lock" transform={`translate(${rect.x + rect.width - 18} ${rect.y + 6})`}>
           <path d="M2.5 5.5V3.75a2.5 2.5 0 0 1 5 0V5.5" />

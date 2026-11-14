@@ -1,6 +1,5 @@
 import type { UnitSystem } from "@vanbuild/core";
 import { useRef, useState } from "react";
-import { AccountMenu } from "../cloud/AccountMenu";
 import { copySharedDesign } from "../cloud/session";
 import type { SyncStatus } from "../cloud/sync";
 import { EXPORTS, type ExportKind, exportDesign } from "../export/exports";
@@ -12,6 +11,7 @@ import { useShell } from "../state/selectors";
 import { useUiStore } from "../state/uiStore";
 import { CopyIcon, DownloadIcon, RedoIcon, UndoIcon } from "../ui/icons";
 import { MenuButton } from "../ui/MenuButton";
+import { MainMenu } from "./MainMenu";
 
 const UNIT_OPTIONS: { value: UnitSystem; label: string; name: string }[] = [
   { value: "metric", label: "mm", name: "Millimetres" },
@@ -237,7 +237,7 @@ export function Toolbar({ repository }: { repository: DesignRepository }) {
           ))}
         </fieldset>
 
-        {!shared && <AccountMenu />}
+        {!shared && <MainMenu />}
 
         <MenuButton
           label={exporting ? "Exporting" : "Export"}

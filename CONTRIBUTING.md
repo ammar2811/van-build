@@ -30,7 +30,8 @@ pnpm test
 pnpm e2e
 ```
 
-All four must pass. Fix lint and flaky tests when you see them, even if you did not cause them.
+All four must pass, and `pnpm budget` must stay under the size budgets. New to the code? Start
+with [docs/architecture.md](docs/architecture.md). Fix lint and flaky tests when you see them, even if you did not cause them.
 
 End-to-end tests never touch a real account service: they build the app with
 `VITE_CLOUD=test`, which talks to an in-memory stand-in held by the test process
@@ -49,12 +50,11 @@ Files in `packages/core/fixtures/golden` are checked-in expected outputs.
 - Drawing goldens change only on purpose: run `pnpm test:update-golden`, look at the new SVG,
   and commit it with the change that caused it.
 
-## Adding a van or a part
+## Adding a van, a part or a template
 
-- Vans: `packages/catalog/src/shells/`, one file per van. Follow
-  [docs/data-sources.md](docs/data-sources.md).
-- Parts: `packages/catalog/src/parts/definitions.ts`. Parts are plain data. Use generic sizes,
-  masses and prices, not a specific manufacturer's product data.
+See [docs/adding-a-part.md](docs/adding-a-part.md). In short: parts and templates are plain
+data in `packages/catalog`, vans need a public source for every number, and the catalog tests
+check that everything fits in every van.
 
 ## Contributor License Agreement
 

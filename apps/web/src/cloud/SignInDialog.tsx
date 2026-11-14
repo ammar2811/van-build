@@ -69,8 +69,7 @@ export function SignInDialog({ onClose }: { onClose: () => void }) {
             type="email"
             autoComplete="email"
             inputMode="email"
-            // biome-ignore lint/a11y/noAutofocus: the dialog exists to fill in this one field
-            autoFocus
+            data-autofocus
             value={email}
             aria-invalid={error !== null}
             aria-describedby={error ? `${id}-error` : undefined}

@@ -6,6 +6,7 @@ import { transit148HighRoof, transit148MediumRoof } from "./shells/transit";
 
 export { categoryLabels, partDefinitions } from "./parts/definitions";
 export { starterDesign } from "./starter";
+export { designFromTemplate, type Template, templates } from "./templates";
 
 export const shells: VanShell[] = [
   sprinter144HighRoof,

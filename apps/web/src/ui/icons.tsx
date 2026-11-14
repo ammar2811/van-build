@@ -113,3 +113,9 @@ export const CloseIcon = () => (
     <path d="m5 5 10 10M15 5 5 15" />
   </Icon>
 );
+
+export const MenuIcon = () => (
+  <Icon>
+    <path d="M3.5 6h13M3.5 10h13M3.5 14h13" />
+  </Icon>
+);

@@ -3,12 +3,12 @@
 An open-source camper van layout planner. Placement that snaps into place, exact dimensions,
 and numbers you can build from.
 
-Status: early. Milestones M0 to M5 are done: foundations, the 2D editor, the weight model, the
-3D view, the full catalog with the parts list and build pack, and accounts with sync and
-sharing. See [Roadmap](#roadmap).
+Status: v1 is feature complete (milestones M0 to M6). See [Roadmap](#roadmap).
 
 ## What works today
 
+- Start in under two minutes: pick your van and a ready-made layout (weekender, full-time
+  solo, couple with a dinette, or an empty van). Every template fits every van.
 - 2D floor plans of six vans (Sprinter 144/170, Transit 148 medium/high roof, ProMaster
   136/159), built from published dimensions with every number sourced or marked as an estimate.
 - Three views of the same design: a top-down plan, a side elevation and a 3D view, with the
@@ -37,6 +37,8 @@ sharing. See [Roadmap](#roadmap).
   on two devices at once is never overwritten silently, named versions can be restored, and
   a read-only link shares a layout with anyone.
 - Installable as an app, and it opens without a connection after the first visit.
+- Works with a keyboard (Tab to a part, Enter to select, arrows to nudge) and is checked with
+  axe on every screen.
 - Export a build pack as a vector PDF (dimensioned floor plan, side elevation, weight estimate
   and parts list), the floor plan as SVG, and the parts list as CSV.
 
@@ -75,6 +77,10 @@ pnpm test
 pnpm e2e
 ```
 
+```bash
+pnpm budget
+```
+
 `pnpm e2e` needs the Playwright browsers once:
 `pnpm --filter @vanbuild/web exec playwright install chromium`.
 
@@ -95,21 +101,23 @@ warnings are derived from it by pure functions and never stored. Every export pa
 drawing description that both the SVG and the PDF writer render, so they cannot disagree. Lengths are millimetres everywhere in the model;
 inches exist only at the edge of the UI.
 
+- [How it is put together](docs/architecture.md)
+- [Adding a part, a template or a van](docs/adding-a-part.md)
 - [Weight and axle-load model](docs/physics.md)
 - [Van data sources](docs/data-sources.md)
 - [Accounts, sync and sharing](docs/accounts.md)
 
 ## Roadmap
 
-| Milestone | Scope                                                         |
-| --------- | ------------------------------------------------------------- |
-| M0 (done) | Engine, one sourced van, 2D drag and snap spike, PDF export   |
-| M1 (done) | Full 2D editor: more parts, locks, stacking, saved locally    |
-| M2 (done) | Live weight and axle-load panel, all six van shells           |
-| M3 (done) | 3D view in sync with the plan, side elevation                 |
-| M4 (done) | Full part catalog, bill of materials, complete build pack PDF |
-| M5 (done) | Accounts, cloud save, share links                             |
-| M6        | Launch hardening                                              |
+| Milestone | Scope                                                            |
+| --------- | ---------------------------------------------------------------- |
+| M0 (done) | Engine, one sourced van, 2D drag and snap spike, PDF export      |
+| M1 (done) | Full 2D editor: more parts, locks, stacking, saved locally       |
+| M2 (done) | Live weight and axle-load panel, all six van shells              |
+| M3 (done) | 3D view in sync with the plan, side elevation                    |
+| M4 (done) | Full part catalog, bill of materials, complete build pack PDF    |
+| M5 (done) | Accounts, cloud save, share links                                |
+| M6 (done) | Starter templates, accessibility, size budgets, contributor docs |
 
 ## Accuracy
 

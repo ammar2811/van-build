@@ -16,6 +16,17 @@ export default defineConfig({
     baseURL: `http://localhost:${PORT}`,
     locale: "en-GB",
     trace: "retain-on-failure",
+    // Most tests are about editing, so they start past the first-visit welcome.
+    // e2e/m6.spec.ts clears this to test the welcome itself.
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: `http://localhost:${PORT}`,
+          localStorage: [{ name: "vanbuild.welcomed", value: "1" }],
+        },
+      ],
+    },
   },
   webServer: {
     // VITE_CLOUD=test swaps the account service for the stand-in in e2e/cloud.ts.

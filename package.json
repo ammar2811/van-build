@@ -16,7 +16,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:update-golden": "UPDATE_GOLDEN=1 vitest run",
-    "e2e": "pnpm --filter @vanbuild/web e2e"
+    "e2e": "pnpm --filter @vanbuild/web e2e",
+    "budget": "VITE_SUPABASE_URL=https://example.supabase.co VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_budget pnpm build && node scripts/check-budgets.mjs apps/web/dist"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.6.7",
