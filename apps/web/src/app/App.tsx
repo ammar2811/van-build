@@ -1,10 +1,12 @@
 import { lazy, Suspense, useState } from "react";
 import { PartsList } from "../bom/PartsList";
+import { ConflictNotice } from "../cloud/ConflictNotice";
 import { Inspector } from "../editor/Inspector";
 import { Palette } from "../editor/Palette";
 import { PlanView } from "../editor/plan/PlanView";
 import { canUseWebGL, Scene3DBoundary, Unavailable } from "../editor/scene3d/Scene3DBoundary";
 import { SideView } from "../editor/side/SideView";
+import type { DesignRepository } from "../persistence/repository";
 import { useUiStore } from "../state/uiStore";
 import { WeightPanel } from "../weight/WeightPanel";
 import { WeightStrip } from "../weight/WeightStrip";
@@ -16,7 +18,7 @@ import { ViewSwitch } from "./ViewSwitch";
 // The 3D engine is large. It is only downloaded when someone opens a 3D view.
 const Scene3D = lazy(() => import("../editor/scene3d/Scene3D"));
 
-export function App() {
+export function App({ repository }: { repository: DesignRepository }) {
   useShortcuts();
   const compact = useIsCompact();
   const hasSelection = useUiStore((state) => state.selectedId !== null);
@@ -33,7 +35,7 @@ export function App() {
 
   return (
     <div className="app" data-has-selection={hasSelection}>
-      <Toolbar />
+      <Toolbar repository={repository} />
       <aside className="sidebar sidebar--palette">
         <Palette />
       </aside>
@@ -72,6 +74,7 @@ export function App() {
             </div>
           )}
         </div>
+        <ConflictNotice />
         {notice && (
           <div className="app-notice" role="alert" data-testid="notice">
             <p>{notice}</p>

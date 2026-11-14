@@ -14,6 +14,8 @@ interface MenuButtonProps {
   testId: string;
   className?: string;
   disabled?: boolean;
+  /** A line of context above the items, such as who is signed in. */
+  heading?: string;
   onSelect: (id: string) => void;
 }
 
@@ -28,6 +30,7 @@ export function MenuButton({
   testId,
   className = "button",
   disabled = false,
+  heading,
   onSelect,
 }: MenuButtonProps) {
   const [open, setOpen] = useState(false);
@@ -109,6 +112,7 @@ export function MenuButton({
           aria-label={label}
           onKeyDown={onMenuKeyDown}
         >
+          {heading && <p className="menu-heading">{heading}</p>}
           {items.map((item) => (
             <button
               key={item.id}

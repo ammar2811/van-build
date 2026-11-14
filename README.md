@@ -3,8 +3,9 @@
 An open-source camper van layout planner. Placement that snaps into place, exact dimensions,
 and numbers you can build from.
 
-Status: early. Milestones M0 to M4 are done: foundations, the 2D editor, the weight model, the
-3D view, and the full catalog with the parts list and build pack. See [Roadmap](#roadmap).
+Status: early. Milestones M0 to M5 are done: foundations, the 2D editor, the weight model, the
+3D view, the full catalog with the parts list and build pack, and accounts with sync and
+sharing. See [Roadmap](#roadmap).
 
 ## What works today
 
@@ -30,7 +31,12 @@ Status: early. Milestones M0 to M4 are done: foundations, the 2D editor, the wei
   in the side panel or straight onto a gap label on the plan.
 - Zoom with the wheel or a pinch; the snapping grid gets finer as you zoom in.
 - Rotate in 90 degree steps, duplicate, lock, undo and redo, keyboard nudging.
-- Your layout is saved in the browser as you work and is still there after a reload.
+- Your layout is saved in the browser as you work and is still there after a reload. No
+  account is needed.
+- Optional accounts (email sign-in link): layouts follow you between devices, a change made
+  on two devices at once is never overwritten silently, named versions can be restored, and
+  a read-only link shares a layout with anyone.
+- Installable as an app, and it opens without a connection after the first visit.
 - Export a build pack as a vector PDF (dimensioned floor plan, side elevation, weight estimate
   and parts list), the floor plan as SVG, and the parts list as CSV.
 
@@ -47,6 +53,9 @@ pnpm dev
 ```
 
 Then open <http://localhost:5173>.
+
+Accounts are off unless `apps/web/.env.local` points at a Supabase project; see
+[Accounts, sync and sharing](docs/accounts.md).
 
 ## Checks
 
@@ -77,6 +86,7 @@ packages/core      Pure TypeScript engine: units, schemas, shell geometry, snapp
 packages/catalog   Data only: van shells and part definitions, with sources.
 apps/web           The editor (React + Vite, react-three-fiber for 3D). Renders what the
                    engine computes. The 3D code is only downloaded when a 3D view is opened.
+supabase           Database schema for accounts, and row level security tests.
 docs               The maths and where the data comes from.
 ```
 
@@ -87,6 +97,7 @@ inches exist only at the edge of the UI.
 
 - [Weight and axle-load model](docs/physics.md)
 - [Van data sources](docs/data-sources.md)
+- [Accounts, sync and sharing](docs/accounts.md)
 
 ## Roadmap
 
@@ -97,7 +108,7 @@ inches exist only at the edge of the UI.
 | M2 (done) | Live weight and axle-load panel, all six van shells           |
 | M3 (done) | 3D view in sync with the plan, side elevation                 |
 | M4 (done) | Full part catalog, bill of materials, complete build pack PDF |
-| M5        | Accounts, cloud save, share links                             |
+| M5 (done) | Accounts, cloud save, share links                             |
 | M6        | Launch hardening                                              |
 
 ## Accuracy

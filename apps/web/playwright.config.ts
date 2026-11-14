@@ -18,7 +18,8 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   webServer: {
-    command: "pnpm build && pnpm preview",
+    // VITE_CLOUD=test swaps the account service for the stand-in in e2e/cloud.ts.
+    command: "VITE_CLOUD=test pnpm build && pnpm preview",
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,

@@ -1,5 +1,7 @@
 import type { SnapGuide, UnitSystem, Vec3 } from "@vanbuild/core";
 import { create } from "zustand";
+import type { CloudUser } from "../cloud/backend";
+import type { SyncStatus } from "../cloud/sync";
 import type { SaveStatus } from "../persistence/autosave";
 
 const UNITS_KEY = "vanbuild.units";
@@ -37,12 +39,20 @@ interface UiState {
   saveStatus: SaveStatus;
   /** A message the user should see once, such as a saved design that could not be opened. */
   notice: string | null;
+  /** "edit" is the person's own design; "shared" is someone else's, opened from a link. */
+  mode: "edit" | "shared";
+  /** Whether this build has accounts at all. */
+  cloudAvailable: boolean;
+  account: CloudUser | null;
+  syncStatus: SyncStatus;
   select: (id: string | null) => void;
   setUnits: (units: UnitSystem) => void;
   setDrag: (drag: DragState | null) => void;
   setViewMode: (viewMode: ViewMode) => void;
   setSaveStatus: (status: SaveStatus) => void;
   setNotice: (notice: string | null) => void;
+  setCloud: (cloud: Partial<Pick<UiState, "cloudAvailable" | "account" | "syncStatus">>) => void;
+  setMode: (mode: UiState["mode"]) => void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -52,6 +62,10 @@ export const useUiStore = create<UiState>((set) => ({
   viewMode: "plan",
   saveStatus: "saved",
   notice: null,
+  mode: "edit",
+  cloudAvailable: false,
+  account: null,
+  syncStatus: "signedOut",
   select: (selectedId) => set({ selectedId }),
   setUnits: (units) => {
     try {
@@ -65,4 +79,6 @@ export const useUiStore = create<UiState>((set) => ({
   setViewMode: (viewMode) => set({ viewMode }),
   setSaveStatus: (saveStatus) => set({ saveStatus }),
   setNotice: (notice) => set({ notice }),
+  setCloud: (cloud) => set(cloud),
+  setMode: (mode) => set({ mode }),
 }));

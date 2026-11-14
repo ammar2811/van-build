@@ -212,6 +212,22 @@ input {
   background: var(--danger);
 }
 
+.save-status[data-status="warn"] {
+  color: var(--warn);
+}
+
+.save-status[data-status="warn"] .save-dot {
+  background: var(--warn);
+}
+
+.button-label-short {
+  display: none;
+}
+
+.save-status[data-status="shared"] .save-dot {
+  background: var(--muted);
+}
+
 .toolbar-shell {
   color: var(--muted);
   overflow: hidden;
@@ -743,7 +759,8 @@ input {
 
 .app-notice {
   position: absolute;
-  top: 12px;
+  /* Below the view switch, so the views stay reachable while a notice is up. */
+  top: 58px;
   left: 50%;
   z-index: 2;
   display: flex;
@@ -1370,6 +1387,212 @@ input {
 
 /* ---------- Phones and narrow tablets ---------- */
 
+/* ---------- Dialogs ---------- */
+
+.modal[open] {
+  display: block;
+  width: min(480px, calc(100vw - 32px));
+  max-height: min(640px, calc(100dvh - 48px));
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 12px 40px rgb(0 0 0 / 0.18);
+  overflow-y: auto;
+}
+
+.modal::backdrop {
+  background: rgb(0 0 0 / 0.35);
+}
+
+.modal-body {
+  display: grid;
+  gap: 14px;
+  padding: 18px 20px 20px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: -2px;
+}
+
+.modal-head h2 {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.modal-close {
+  margin-right: -8px;
+  border-color: transparent;
+}
+
+.modal-text {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-form {
+  display: grid;
+  gap: 8px;
+}
+
+.modal-form label {
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.modal-submit {
+  justify-self: start;
+  margin-top: 4px;
+}
+
+.modal-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.text-input {
+  width: 100%;
+  min-width: 0;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  background: var(--panel);
+}
+
+.text-input:hover {
+  border-color: var(--muted);
+}
+
+.text-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+  border-color: var(--accent);
+}
+
+.text-input[aria-invalid="true"] {
+  border-color: var(--danger);
+  outline-color: var(--danger);
+}
+
+.field-error--left {
+  margin-top: 0;
+  text-align: left;
+}
+
+.inline-form {
+  display: flex;
+  gap: 8px;
+}
+
+.inline-form .button {
+  height: 36px;
+}
+
+.share-url {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.success {
+  padding: 9px 11px;
+  border-radius: var(--radius);
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.design-list {
+  display: grid;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.design-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 8px 10px 8px 12px;
+}
+
+.design-list li + li {
+  border-top: 1px solid var(--line);
+}
+
+.design-list li[data-open="true"] {
+  background: var(--accent-soft);
+}
+
+.design-text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.design-name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.design-text .muted {
+  font-size: 12px;
+}
+
+.design-open {
+  padding: 0 8px;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.button--danger-solid {
+  background: var(--danger);
+  border-color: var(--danger);
+  color: #fff;
+}
+
+.button--danger-solid:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--danger) 88%, black);
+  border-color: color-mix(in srgb, var(--danger) 88%, black);
+}
+
+.menu-heading {
+  padding: 6px 10px 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-notice--stack {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  padding: 12px 14px;
+  border-color: var(--danger);
+}
+
 /* ---------- Menus ---------- */
 
 .visually-hidden {
@@ -1939,5 +2162,51 @@ input {
 
   .menu-item {
     padding: 10px;
+  }
+}
+
+@media (max-width: 820px) {
+  .modal[open] {
+    width: 100%;
+    max-width: none;
+    max-height: 88dvh;
+    margin: auto 0 0;
+    border: 0;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .modal-body {
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom));
+  }
+
+  .text-input {
+    height: 42px;
+    font-size: 16px;
+  }
+
+  .inline-form .button {
+    height: 42px;
+  }
+
+  .modal-submit {
+    justify-self: stretch;
+  }
+
+  .design-list .button {
+    height: 38px;
+  }
+
+  .toolbar [data-testid="copy-shared"] {
+    width: auto;
+    padding: 0 10px;
+  }
+
+  /* On a phone the button is the only sign that this is someone else's layout. */
+  .toolbar [data-testid="copy-shared"] .button-label-short {
+    display: inline;
+  }
+
+  .app-notice {
+    top: 66px;
   }
 }

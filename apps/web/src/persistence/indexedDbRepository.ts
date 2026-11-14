@@ -1,8 +1,10 @@
+import type { CloudLink, LinkStore } from "../cloud/sync";
 import type { DesignRepository } from "./repository";
 
 const DATABASE = "vanbuild";
 const STORE = "designs";
 const CURRENT = "current";
+const CLOUD_LINK = "cloud-link";
 
 function open(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -42,6 +44,18 @@ export function indexedDbRepository(): DesignRepository {
     },
     keepBackup: async (raw) => {
       await run("readwrite", (store) => store.put(raw, `backup:${new Date().toISOString()}`));
+    },
+  };
+}
+
+/** Remembers which design in the account the design on this device belongs to. */
+export function indexedDbLinkStore(): LinkStore {
+  return {
+    load: async () =>
+      ((await run("readonly", (store) => store.get(CLOUD_LINK))) as CloudLink | undefined) ?? null,
+    save: async (link) => {
+      if (link) await run("readwrite", (store) => store.put(link, CLOUD_LINK));
+      else await run("readwrite", (store) => store.delete(CLOUD_LINK));
     },
   };
 }

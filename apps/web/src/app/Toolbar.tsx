@@ -1,12 +1,16 @@
 import type { UnitSystem } from "@vanbuild/core";
 import { useRef, useState } from "react";
+import { AccountMenu } from "../cloud/AccountMenu";
+import { copySharedDesign } from "../cloud/session";
+import type { SyncStatus } from "../cloud/sync";
 import { EXPORTS, type ExportKind, exportDesign } from "../export/exports";
 import type { SaveStatus } from "../persistence/autosave";
+import type { DesignRepository } from "../persistence/repository";
 import { renameDesign } from "../state/actions";
 import { useDocStore } from "../state/docStore";
 import { useShell } from "../state/selectors";
 import { useUiStore } from "../state/uiStore";
-import { DownloadIcon, RedoIcon, UndoIcon } from "../ui/icons";
+import { CopyIcon, DownloadIcon, RedoIcon, UndoIcon } from "../ui/icons";
 import { MenuButton } from "../ui/MenuButton";
 
 const UNIT_OPTIONS: { value: UnitSystem; label: string; name: string }[] = [
@@ -20,6 +24,41 @@ const SAVE_LABEL: Record<SaveStatus, string> = {
   saving: "Saving",
   failed: "Not saved",
 };
+
+/** What a signed-in person sees. The device copy always comes first, so offline is not an error. */
+const SYNC_LABEL: Record<Exclude<SyncStatus, "signedOut">, string> = {
+  synced: "Saved to your account",
+  syncing: "Saving",
+  offline: "Saved on this device, will sync",
+  conflict: "Changed on another device",
+  error: "Saved on this device, not synced",
+};
+
+type StatusTone = "saved" | "pending" | "warn" | "failed";
+
+function useStatus(): { tone: StatusTone; text: string; title?: string } {
+  const saveStatus = useUiStore((state) => state.saveStatus);
+  const syncStatus = useUiStore((state) => state.syncStatus);
+  const signedIn = useUiStore((state) => state.account !== null);
+  if (saveStatus === "failed") {
+    return {
+      tone: "failed",
+      text: SAVE_LABEL.failed,
+      title:
+        "This browser is not letting the design be saved. Export the build pack to keep a copy.",
+    };
+  }
+  if (saveStatus !== "saved") return { tone: "pending", text: SAVE_LABEL[saveStatus] };
+  if (!signedIn || syncStatus === "signedOut") return { tone: "saved", text: SAVE_LABEL.saved };
+  const tone: Record<Exclude<SyncStatus, "signedOut">, StatusTone> = {
+    synced: "saved",
+    syncing: "pending",
+    offline: "warn",
+    conflict: "failed",
+    error: "warn",
+  };
+  return { tone: tone[syncStatus], text: SYNC_LABEL[syncStatus] };
+}
 
 /** The design's name. Click it to rename; Enter applies, Escape cancels. */
 function DesignName() {
@@ -69,14 +108,49 @@ function DesignName() {
   );
 }
 
-export function Toolbar() {
+/** Viewing someone else's layout: say so, and offer to keep a copy. */
+function SharedActions({ repository }: { repository: DesignRepository }) {
+  const [busy, setBusy] = useState(false);
+  return (
+    <>
+      <span className="save-status" data-status="shared" data-testid="save-status" role="status">
+        <span className="save-dot" aria-hidden="true" />
+        <span className="save-text">Shared layout, changes are not saved</span>
+      </span>
+      <button
+        type="button"
+        className="button"
+        data-testid="copy-shared"
+        aria-label="Make a copy to keep working on it"
+        disabled={busy}
+        onClick={() => {
+          setBusy(true);
+          copySharedDesign(repository).catch((error) => {
+            console.error(error);
+            setBusy(false);
+            useUiStore.getState().setNotice("The copy could not be saved in this browser.");
+          });
+        }}
+      >
+        <CopyIcon />
+        <span className="button-label">{busy ? "Copying" : "Make a copy"}</span>
+        <span className="button-label-short" aria-hidden="true">
+          {busy ? "Copying" : "Copy"}
+        </span>
+      </button>
+    </>
+  );
+}
+
+export function Toolbar({ repository }: { repository: DesignRepository }) {
   const canUndo = useDocStore((state) => state.past.length > 0);
   const canRedo = useDocStore((state) => state.future.length > 0);
   const undo = useDocStore((state) => state.undo);
   const redo = useDocStore((state) => state.redo);
   const units = useUiStore((state) => state.units);
   const setUnits = useUiStore((state) => state.setUnits);
-  const saveStatus = useUiStore((state) => state.saveStatus);
+  const status = useStatus();
+  const shared = useUiStore((state) => state.mode === "shared");
   const shell = useShell();
   const [exporting, setExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
@@ -100,20 +174,20 @@ export function Toolbar() {
         <span className="wordmark">Van Build</span>
         <DesignName />
         <span className="toolbar-shell">{shell.name}</span>
-        <span
-          className="save-status"
-          data-status={saveStatus}
-          data-testid="save-status"
-          role="status"
-          title={
-            saveStatus === "failed"
-              ? "This browser is not letting the design be saved. Export the build pack to keep a copy."
-              : undefined
-          }
-        >
-          <span className="save-dot" aria-hidden="true" />
-          <span className="save-text">{SAVE_LABEL[saveStatus]}</span>
-        </span>
+        {shared ? (
+          <SharedActions repository={repository} />
+        ) : (
+          <span
+            className="save-status"
+            data-status={status.tone}
+            data-testid="save-status"
+            role="status"
+            title={status.title}
+          >
+            <span className="save-dot" aria-hidden="true" />
+            <span className="save-text">{status.text}</span>
+          </span>
+        )}
       </div>
 
       <div className="toolbar-actions">
@@ -162,6 +236,8 @@ export function Toolbar() {
             </label>
           ))}
         </fieldset>
+
+        {!shared && <AccountMenu />}
 
         <MenuButton
           label={exporting ? "Exporting" : "Export"}

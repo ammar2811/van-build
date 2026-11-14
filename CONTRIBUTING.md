@@ -32,6 +32,11 @@ pnpm e2e
 
 All four must pass. Fix lint and flaky tests when you see them, even if you did not cause them.
 
+End-to-end tests never touch a real account service: they build the app with
+`VITE_CLOUD=test`, which talks to an in-memory stand-in held by the test process
+(`apps/web/e2e/cloud.ts`). Changes to the database go in a new file in `supabase/migrations`,
+with checks added to `supabase/tests/rls.sql`.
+
 End-to-end tests run on Chromium and a phone profile locally. WebKit also runs in CI; set
 `E2E_WEBKIT=1` to run it locally on a system Playwright's WebKit supports.
 

@@ -100,3 +100,16 @@ export const CopyIcon = () => (
     <path d="M13 7V5.5A1.5 1.5 0 0 0 11.5 4h-6A1.5 1.5 0 0 0 4 5.5v6A1.5 1.5 0 0 0 5.5 13H7" />
   </Icon>
 );
+
+export const UserIcon = () => (
+  <Icon>
+    <circle cx="10" cy="7" r="3.2" />
+    <path d="M3.8 17a6.2 6.2 0 0 1 12.4 0" />
+  </Icon>
+);
+
+export const CloseIcon = () => (
+  <Icon>
+    <path d="m5 5 10 10M15 5 5 15" />
+  </Icon>
+);

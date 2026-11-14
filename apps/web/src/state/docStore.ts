@@ -27,6 +27,8 @@ interface DocState {
   redo: () => void;
   /** Replace the whole design and forget history (opening another design). */
   reset: (doc: DesignDoc) => void;
+  /** Replace the whole design as one undoable step (bringing back an old version). */
+  replace: (label: string, doc: DesignDoc) => void;
 }
 
 export const useDocStore = create<DocState>((set, get) => ({
@@ -67,4 +69,14 @@ export const useDocStore = create<DocState>((set, get) => ({
   },
 
   reset: (doc) => set({ doc, past: [], future: [] }),
+
+  replace: (label, next) => {
+    const [doc, patches, inverse] = produceWithPatches(get().doc, () => next);
+    if (patches.length === 0) return;
+    set((state) => ({
+      doc,
+      past: [...state.past, { label, patches, inverse }].slice(-HISTORY_LIMIT),
+      future: [],
+    }));
+  },
 }));
