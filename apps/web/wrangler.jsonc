@@ -1,0 +1,13 @@
+// Hosting on Cloudflare: the built app is served as static assets, no server code.
+// Deploy with `pnpm release` from the repository root (it builds first).
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "van-build",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Any unknown path gets the app, which then shows the plan.
+    "not_found_handling": "single-page-application"
+  },
+  "observability": { "enabled": true }
+}

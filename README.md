@@ -5,6 +5,8 @@ and numbers you can build from.
 
 Status: v1 is feature complete (milestones M0 to M6). See [Roadmap](#roadmap).
 
+Try it: <https://van-build.holor-reception.workers.dev>
+
 ## What works today
 
 - Start in under two minutes: pick your van and a ready-made layout (weekender, full-time
@@ -106,6 +108,7 @@ inches exist only at the edge of the UI.
 - [Weight and axle-load model](docs/physics.md)
 - [Van data sources](docs/data-sources.md)
 - [Accounts, sync and sharing](docs/accounts.md)
+- [Hosting and deploying](docs/hosting.md)
 
 ## Roadmap
 

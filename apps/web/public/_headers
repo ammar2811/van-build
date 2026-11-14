@@ -1,0 +1,21 @@
+# Cache rules the offline mode depends on, and basic security headers.
+
+# Built files never change: their names carry a hash of their contents.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Always check for a new release.
+/
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Frame-Options: DENY
